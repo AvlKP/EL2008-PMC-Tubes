@@ -53,6 +53,7 @@ Mkfile.old
 dkms.conf
 
 # CMake
+build/
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
