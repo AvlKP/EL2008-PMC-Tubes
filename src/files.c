@@ -7,30 +7,33 @@
 
 #define BUFLEN 256
 
-char* MONTHS[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+char *MONTHS[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
-Tanggal* bacaTanggal(char *sTanggal)
+Tanggal *bacaTanggal(char *sTanggal)
 {
   int hari, bulan, tahun;
   char sBulan[10];
 
-  if (sscanf(sTanggal, "%d %s %d", &hari, sBulan, &tahun) != 3) {
+  if (sscanf(sTanggal, "%d %s %d", &hari, sBulan, &tahun) != 3)
+  {
     sscanf(sTanggal, "%d-%s-%d", &hari, sBulan, &tahun);
   }
-  
-  for (int i = 0; i < 12; i ++) {
-    if (!strncmp(MONTHS[i], sBulan, 3)) {
-      bulan = i+1;
+
+  for (int i = 0; i < 12; i++)
+  {
+    if (!strncmp(MONTHS[i], sBulan, 3))
+    {
+      bulan = i + 1;
       break;
     }
   }
 
- return buatTanggal(hari, bulan, tahun);
+  return buatTanggal(hari, bulan, tahun);
 }
 
-Pasien* bacaDataPasien(char *path)
+Pasien *bacaDataPasien(char *path)
 {
-  FILE* fp = fopen(path, "r");
+  FILE *fp = fopen(path, "r");
   if (fp == NULL)
   {
     printf("File data pasien gagal dibuka.\n");
@@ -40,25 +43,28 @@ Pasien* bacaDataPasien(char *path)
   char buf[BUFLEN];
   int row = 0;
 
-  Pasien* daftarPasien = NULL;
-  Pasien* tempPasien = NULL;
+  Pasien *daftarPasien = NULL;
+  Pasien *tempPasien = NULL;
   while (fgets(buf, BUFLEN, fp))
   {
     if (row > 0)
     {
       int ID, umur, BPJS;
       char nama[25], alamat[25], kota[25], tempatLahir[25], tempTanggal[20];
-      Tanggal* tanggalLahir;
+      Tanggal *tanggalLahir;
 
       sscanf(buf, "%*d, %[^,], %[^,], %[^,], %[^,], %[^,], %d, %d, %*s %d",
              nama, alamat, kota, tempatLahir, tempTanggal, &umur, &BPJS, &ID);
 
       tanggalLahir = bacaTanggal(tempTanggal);
 
-      if (daftarPasien == NULL) {
+      if (daftarPasien == NULL)
+      {
         daftarPasien = buatPasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
         tempPasien = daftarPasien;
-      } else {
+      }
+      else
+      {
         tempPasien->next = buatPasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
         tempPasien = tempPasien->next;
       }
@@ -70,8 +76,9 @@ Pasien* bacaDataPasien(char *path)
   return daftarPasien;
 }
 
-Riwayat* bacaRiwayat(char *path) {
-  FILE* fp = fopen(path, "r");
+Riwayat *bacaRiwayat(char *path)
+{
+  FILE *fp = fopen(path, "r");
   if (fp == NULL)
   {
     printf("File riwayat gagal dibuka.\n");
@@ -81,32 +88,35 @@ Riwayat* bacaRiwayat(char *path) {
   char buf[BUFLEN];
   int row = 0;
 
-  Riwayat* daftarRiwayat = NULL;
-  Riwayat* tempRiwayat = NULL;
+  Riwayat *daftarRiwayat = NULL;
+  Riwayat *tempRiwayat = NULL;
   while (fgets(buf, BUFLEN, fp))
   {
     if (row > 0)
     {
       int ID, biaya;
-      Tanggal* tanggal;
-      Tanggal* kontrol;
+      Tanggal *tanggal;
+      Tanggal *kontrol;
       Diagnosis diagnosis;
       Tindakan tindakan;
 
       char tempTanggal[20], tempKontrol[20], tempDiagnosis[20], tempTindakan[20];
 
       sscanf(buf, "%*d, %[^,], %*s %d, %[^,], %[^,], %[^,], %d",
-      tempTanggal, &ID, tempDiagnosis, tempTindakan, tempKontrol, &biaya);
-      
+             tempTanggal, &ID, tempDiagnosis, tempTindakan, tempKontrol, &biaya);
+
       tanggal = bacaTanggal(tempTanggal);
       kontrol = bacaTanggal(tempKontrol);
       diagnosis = str2Diagnosis(tempDiagnosis);
       tindakan = str2Tindakan(tempTindakan);
 
-      if (daftarRiwayat == NULL) {
+      if (daftarRiwayat == NULL)
+      {
         daftarRiwayat = buatRiwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
         tempRiwayat = daftarRiwayat;
-      } else {
+      }
+      else
+      {
         tempRiwayat->next = buatRiwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
         tempRiwayat = tempRiwayat->next;
       }
@@ -118,8 +128,9 @@ Riwayat* bacaRiwayat(char *path) {
   return daftarRiwayat;
 }
 
-void bacaBiaya(char *path, int* biaya){
-  FILE* fp = fopen(path, "r");
+void bacaBiaya(char *path, int *biaya)
+{
+  FILE *fp = fopen(path, "r");
 
   if (fp == NULL)
   {
