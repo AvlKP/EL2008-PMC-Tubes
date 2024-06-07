@@ -19,20 +19,16 @@ project(
 
 add_executable(${PROJECT_NAME})
 
-find_library(RAYLIB raylib ${CMAKE_CURRENT_SOURCE_DIR}/lib/raylib/lib)
-find_path(RAYLIB_INCLUDES raylib.h ${CMAKE_CURRENT_SOURCE_DIR}/lib/raylib/include)
-if (${RAYLIB} STREQUAL RAYLIB-NOTFOUND)
-  message(FATAL_ERROR "raylib tidak ditemukan.")
-else()
-  message(STATUS "raylib berhasil ditemukan sebagai ${RAYLIB}")
-endif()
-
 list(TRANSFORM SOURCES PREPEND "src/")
 list(TRANSFORM HEADERS PREPEND "include/")
 
+set(nappgui_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/NAppGUI/cmake)
+find_package(nappgui)
+
 target_include_directories(${PROJECT_NAME}
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
-  PRIVATE ${RAYLIB_INCLUDES}
+  PRIVATE ${NAPPGUI_INCLUDE_DIR}
 )
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES} ${HEADERS})
-target_link_libraries(${PROJECT_NAME} ${RAYLIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${NAPPGUI_LIBRARIES})
+# set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
