@@ -144,11 +144,11 @@ void cetakPasien(Pasien *pasien)
 {
   int i = 1;
   char tanggalLahir[20];
-  cetakTanggal(tanggalLahir, pasien->tanggalLahir);
 
   Pasien *curr = pasien;
   while (curr != NULL)
   {
+    cetakTanggal(tanggalLahir, curr->tanggalLahir);
     printf("%d. %s | %s | %s | %s | %s | %d | %d | %d\n",
            i, curr->nama, curr->alamat, curr->kota, curr->tempatLahir, tanggalLahir, curr->umur, curr->BPJS, curr->ID);
     i++;
