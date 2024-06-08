@@ -5,6 +5,34 @@
 
 Tindakan str2Tindakan(char *str)
 {
+  if (!strcmp(str, "Pendaftaran"))
+  {
+    return Pendaftaran;
+  }
+  else if (!strcmp(str, "Pemeriksaan"))
+  {
+    return Pemeriksaan;
+  }
+  else if (!strcmp(str, "Vaksinasi"))
+  {
+    return Vaksinasi;
+  }
+  else if (!strcmp(str, "Pemasangan infus"))
+  {
+    return PasangInfus;
+  }
+  else if (!strcmp(str, "Pengobatan"))
+  {
+    return Pengobatan;
+  }
+  else
+  {
+    return CekGulaDarah;
+  }
+}
+
+Diagnosis str2Diagnosis(char *str)
+{
   if (!strcmp(str, "Dehidrasi"))
   {
     return Dehidrasi;
@@ -20,34 +48,6 @@ Tindakan str2Tindakan(char *str)
   else
   {
     return MasukAngin;
-  }
-}
-
-Diagnosis str2Diagnosis(char *str)
-{
-  if (!strcmp(str, "Pendaftaran"))
-  {
-    return Pendaftaran;
-  }
-  else if (!strcmp(str, "Pemeriksaan"))
-  {
-    return Pemeriksaan;
-  }
-  else if (!strcmp(str, "Vaksinasi"))
-  {
-    return Vaksinasi;
-  }
-  else if (!strcmp(str, "Pasang Infus"))
-  {
-    return PasangInfus;
-  }
-  else if (!strcmp(str, "Pengobatan"))
-  {
-    return Pengobatan;
-  }
-  else
-  {
-    return CekGulaDarah;
   }
 }
 
@@ -84,10 +84,10 @@ void tindakan2Str(char *str, Tindakan tindakan)
     strcpy(str, "Vaksinasi");
     break;
   case CekGulaDarah:
-    strcpy(str, "Cek Gula Darah");
+    strcpy(str, "Cek gula darah");
     break;
   case PasangInfus:
-    strcpy(str, "Pasang Infus");
+    strcpy(str, "Pemasangan infus");
     break;
   case Pengobatan:
     strcpy(str, "Pengobatan");
@@ -160,18 +160,17 @@ void cetakRiwayat(Riwayat *riwayat)
 {
   int i = 1;
   char tanggal[20], kontrol[20];
-  cetakTanggal(tanggal, riwayat->tanggal);
-  cetakTanggal(kontrol, riwayat->kontrol);
-
   char diagnosis[20];
-  diagnosis2Str(diagnosis, riwayat->diagnosis);
   char tindakan[20];
-  tindakan2Str(tindakan, riwayat->tindakan);
 
   Riwayat *curr = riwayat;
   while (curr != NULL)
   {
-    printf("%d. %s | %d | %s | %s | %s | %d\n", i, tanggal, riwayat->ID, diagnosis, tindakan, kontrol, riwayat->biaya);
+    diagnosis2Str(diagnosis, curr->diagnosis);
+    tindakan2Str(tindakan, curr->tindakan);
+    cetakTanggal(tanggal, curr->tanggal);
+    cetakTanggal(kontrol, curr->kontrol);
+    printf("%d. %s | %d | %s | %s | %s | %d\n", i, tanggal, curr->ID, diagnosis, tindakan, kontrol, curr->biaya);
     i++;
     curr = curr->next;
   }

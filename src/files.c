@@ -9,14 +9,15 @@
 
 char *MONTHS[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
-Tanggal *bacaTanggal(char *sTanggal)
+Tanggal *bacaTanggal(char *sTanggal, int offset)
 {
   int hari, bulan, tahun;
-  char sBulan[10];
+  char sBulan[10], temp[10];
 
   if (sscanf(sTanggal, "%d %s %d", &hari, sBulan, &tahun) != 3)
   {
-    sscanf(sTanggal, "%d-%s-%d", &hari, sBulan, &tahun);
+    sscanf(sTanggal, "%d-%[^-]-%d", &hari, sBulan, &tahun);
+    tahun += offset;
   }
 
   for (int i = 0; i < 12; i++)
@@ -56,7 +57,7 @@ Pasien *bacaDataPasien(char *path)
       sscanf(buf, "%*d, %[^,], %[^,], %[^,], %[^,], %[^,], %d, %d, %*s %d",
              nama, alamat, kota, tempatLahir, tempTanggal, &umur, &BPJS, &ID);
 
-      tanggalLahir = bacaTanggal(tempTanggal);
+      tanggalLahir = bacaTanggal(tempTanggal, 1900);
 
       if (daftarPasien == NULL)
       {
@@ -105,8 +106,8 @@ Riwayat *bacaRiwayat(char *path)
       sscanf(buf, "%*d, %[^,], %*s %d, %[^,], %[^,], %[^,], %d",
              tempTanggal, &ID, tempDiagnosis, tempTindakan, tempKontrol, &biaya);
 
-      tanggal = bacaTanggal(tempTanggal);
-      kontrol = bacaTanggal(tempKontrol);
+      tanggal = bacaTanggal(tempTanggal, 2000);
+      kontrol = bacaTanggal(tempKontrol, 2000);
       diagnosis = str2Diagnosis(tempDiagnosis);
       tindakan = str2Tindakan(tempTindakan);
 
