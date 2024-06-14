@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/github/AvlKP/KlinikX">
+    <file>klinikx.ui</file>
+    <file>pasien.ui</file>
+  </gresource>
+</gresources>

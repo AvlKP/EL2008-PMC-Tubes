@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="KlinikX">
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkApplicationWindow" id="window">
+    <property name="title">Klinik X</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <property name="resizable">FALSE</property>
+
+    <child>
+      <object class="GtkNotebook" id="notebook">
+        
+      </object>
+    </child> 
+  </object>
+</interface>

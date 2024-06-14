@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="KlinikX">
+  <requires lib="gtk" version="4.0" />
+  <template class="PasienBox" parent="GtkBox">
+    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <child>
+          <object class="GtkButton" id="btn_buat">
+            <property name="label">Buat</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_ubah">
+            <property name="label">Ubah</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_hapus">
+            <property name="label">Hapus</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Cari berdasarkan:</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="btn_search_by">
+                <property name="label">ID</property>
+                <property name="active">TRUE</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="label">Nama</property>
+                <property name="group">btn_search_by</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSearchEntry" id="search">
+            <property name="placeholder-text">Cari Pasien</property>
+            <property name="hexpand">TRUE</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hexpand">TRUE</property>
+            <property name="vexpand">TRUE</property>
+            <child>
+              <object class="GtkColumnView" id="table">
+                <property name="show-column-separators">TRUE</property>
+                <property name="show-row-separators">TRUE</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

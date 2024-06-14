@@ -1,16 +1,15 @@
-#include "types.h"
-#include "files.h"
+#include <gtk/gtk.h>
+#include "gui.h"
 
-int main()
+int main(int argc, char **argv)
 {
-  Pasien *pasien = bacaDataPasien("data/Data Pasien.csv");
-  Riwayat *riwayat = bacaRiwayat("data/Riwayat.csv");
-  int biaya[6];
-  bacaBiaya("data/Biaya.csv", biaya);
+  GtkApplication *app;
+  int status;
 
-  // cetakPasien(pasien);
-  // cetakRiwayat(riwayat);
-  // printf("%d\n", biaya[CekGulaDarah]);
+  app = gtk_application_new("com.github.AvlKP.KlinikX", G_APPLICATION_DEFAULT_FLAGS);
+  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+  status = g_application_run(G_APPLICATION(app), argc, argv);
+  g_object_unref(app);
 
-  return 0;
+  return status;
 }

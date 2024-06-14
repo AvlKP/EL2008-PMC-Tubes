@@ -1,3 +1,4 @@
+#pragma once
 #include "types.h"
 
 Pasien *bacaDataPasien(char *path);
