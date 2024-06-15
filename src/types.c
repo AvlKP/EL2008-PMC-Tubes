@@ -3,7 +3,7 @@
 #include <string.h>
 #include "types.h"
 
-Tindakan str2Tindakan(char *str)
+Tindakan str_ke_tindakan(char *str)
 {
   if (!strcmp(str, "Pendaftaran"))
   {
@@ -31,7 +31,7 @@ Tindakan str2Tindakan(char *str)
   }
 }
 
-Diagnosis str2Diagnosis(char *str)
+Diagnosis str_ke_diagnosis(char *str)
 {
   if (!strcmp(str, "Dehidrasi"))
   {
@@ -51,7 +51,7 @@ Diagnosis str2Diagnosis(char *str)
   }
 }
 
-void diagnosis2Str(char *str, Diagnosis diagnosis)
+void diagnosis_ke_str(char *str, Diagnosis diagnosis)
 {
   switch (diagnosis)
   {
@@ -70,7 +70,7 @@ void diagnosis2Str(char *str, Diagnosis diagnosis)
   }
 }
 
-void tindakan2Str(char *str, Tindakan tindakan)
+void tindakan_ke_str(char *str, Tindakan tindakan)
 {
   switch (tindakan)
   {
@@ -95,7 +95,7 @@ void tindakan2Str(char *str, Tindakan tindakan)
   }
 }
 
-Tanggal *buatTanggal(int hari, int bulan, int tahun)
+Tanggal *buat_tanggal(int hari, int bulan, int tahun)
 {
   Tanggal *tanggal = malloc(sizeof(Tanggal));
   tanggal->hari = hari;
@@ -105,7 +105,7 @@ Tanggal *buatTanggal(int hari, int bulan, int tahun)
   return tanggal;
 }
 
-Pasien *buatPasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS)
+Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS)
 {
   Pasien *pasien = malloc(sizeof(Pasien));
   pasien->next = NULL;
@@ -113,15 +113,15 @@ Pasien *buatPasien(int ID, char *nama, char *alamat, char *kota, char *tempatLah
   pasien->umur = umur;
   pasien->BPJS = BPJS;
   pasien->tanggalLahir = tanggalLahir;
-  strcpy(pasien->nama, nama);
-  strcpy(pasien->alamat, alamat);
-  strcpy(pasien->kota, kota);
-  strcpy(pasien->tempatLahir, tempatLahir);
+  strncpy(pasien->nama, nama, sizeof(pasien->nama) - 1);
+  strncpy(pasien->alamat, alamat, sizeof(pasien->alamat) - 1);
+  strncpy(pasien->kota, kota, sizeof(pasien->kota) - 1);
+  strncpy(pasien->tempatLahir, tempatLahir, sizeof(pasien->tempatLahir) - 1);
 
   return pasien;
 }
 
-Riwayat *buatRiwayat(int ID, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya)
+Riwayat *buat_riwayat(int ID, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya)
 {
   Riwayat *riwayat = malloc(sizeof(Riwayat));
   riwayat->next = NULL;
@@ -135,12 +135,12 @@ Riwayat *buatRiwayat(int ID, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tin
   return riwayat;
 }
 
-void cetakTanggal(char *str, Tanggal *tanggal)
+void cetak_tanggal(char *str, Tanggal *tanggal)
 {
   sprintf(str, "%d %s %d", tanggal->hari, MONTHS[tanggal->bulan - 1], tanggal->tahun);
 }
 
-void cetakPasien(Pasien *pasien)
+void cetak_pasien(Pasien *pasien)
 {
   int i = 1;
   char tanggalLahir[20];
@@ -148,7 +148,7 @@ void cetakPasien(Pasien *pasien)
   Pasien *curr = pasien;
   while (curr != NULL)
   {
-    cetakTanggal(tanggalLahir, curr->tanggalLahir);
+    cetak_tanggal(tanggalLahir, curr->tanggalLahir);
     printf("%d. %s | %s | %s | %s | %s | %d | %d | %d\n",
            i, curr->nama, curr->alamat, curr->kota, curr->tempatLahir, tanggalLahir, curr->umur, curr->BPJS, curr->ID);
     i++;
@@ -156,7 +156,7 @@ void cetakPasien(Pasien *pasien)
   }
 }
 
-void cetakRiwayat(Riwayat *riwayat)
+void cetak_riwayat(Riwayat *riwayat)
 {
   int i = 1;
   char tanggal[20], kontrol[20];
@@ -166,17 +166,17 @@ void cetakRiwayat(Riwayat *riwayat)
   Riwayat *curr = riwayat;
   while (curr != NULL)
   {
-    diagnosis2Str(diagnosis, curr->diagnosis);
-    tindakan2Str(tindakan, curr->tindakan);
-    cetakTanggal(tanggal, curr->tanggal);
-    cetakTanggal(kontrol, curr->kontrol);
+    diagnosis_ke_str(diagnosis, curr->diagnosis);
+    tindakan_ke_str(tindakan, curr->tindakan);
+    cetak_tanggal(tanggal, curr->tanggal);
+    cetak_tanggal(kontrol, curr->kontrol);
     printf("%d. %s | %d | %s | %s | %s | %d\n", i, tanggal, curr->ID, diagnosis, tindakan, kontrol, curr->biaya);
     i++;
     curr = curr->next;
   }
 }
 
-void hapusPasien(Pasien *pasien)
+void hapus_pasien(Pasien *pasien)
 {
   Pasien *temp;
 
@@ -189,7 +189,7 @@ void hapusPasien(Pasien *pasien)
   }
 }
 
-void hapusRiwayat(Riwayat *riwayat)
+void hapus_riwayat(Riwayat *riwayat)
 {
   Riwayat *temp;
 
@@ -201,4 +201,66 @@ void hapusRiwayat(Riwayat *riwayat)
     free(temp->kontrol);
     free(temp);
   }
+}
+
+// NO 1
+
+void add_pasien(Pasien **head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS)
+{
+  Pasien *new_pasien = buat_pasien(id, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
+  new_pasien->next = *head;
+  *head = new_pasien;
+}
+
+void edit_pasien(Pasien *head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS)
+{
+  strncpy(head->nama, nama, sizeof(head->nama) - 1);
+  strncpy(head->alamat, alamat, sizeof(head->alamat) - 1);
+  strncpy(head->kota, kota, sizeof(head->kota) - 1);
+  strncpy(head->tempatLahir, tempatLahir, sizeof(head->tempatLahir) - 1);
+  head->ID = id;
+  head->tanggalLahir = tanggalLahir;
+  head->umur = umur;
+  head->BPJS = BPJS;
+}
+
+void delete_pasien(Pasien **head, int id)
+{
+  Pasien *current = *head;
+  Pasien *prev = NULL;
+
+  while (current != NULL && current->ID != id)
+  {
+    prev = current;
+    current = current->next;
+  }
+
+  if (current == NULL)
+    return;
+
+  if (prev == NULL)
+  {
+    *head = current->next;
+  }
+  else
+  {
+    prev->next = current->next;
+  }
+
+  free(current->tanggalLahir);
+  free(current);
+}
+
+Pasien *search_pasien_by_id(Pasien *head, int id)
+{
+  Pasien *current = head;
+  while (current != NULL)
+  {
+    if (current->ID == id)
+    {
+      return current;
+    }
+    current = current->next;
+  }
+  return NULL;
 }

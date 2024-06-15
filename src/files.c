@@ -9,7 +9,7 @@
 
 char *MONTHS[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
-Tanggal *bacaTanggal(char *sTanggal, int offset)
+Tanggal *baca_tanggal(char *sTanggal, int offset)
 {
   int hari, bulan, tahun;
   char sBulan[10], temp[10];
@@ -29,10 +29,10 @@ Tanggal *bacaTanggal(char *sTanggal, int offset)
     }
   }
 
-  return buatTanggal(hari, bulan, tahun);
+  return buat_tanggal(hari, bulan, tahun);
 }
 
-Pasien *bacaDataPasien(char *path)
+Pasien *baca_data_pasien(char *path)
 {
   FILE *fp = fopen(path, "r");
   if (fp == NULL)
@@ -57,16 +57,16 @@ Pasien *bacaDataPasien(char *path)
       sscanf(buf, "%*d, %[^,], %[^,], %[^,], %[^,], %[^,], %d, %d, %*s %d",
              nama, alamat, kota, tempatLahir, tempTanggal, &umur, &BPJS, &ID);
 
-      tanggalLahir = bacaTanggal(tempTanggal, 1900);
+      tanggalLahir = baca_tanggal(tempTanggal, 1900);
 
       if (daftarPasien == NULL)
       {
-        daftarPasien = buatPasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
+        daftarPasien = buat_pasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
         tempPasien = daftarPasien;
       }
       else
       {
-        tempPasien->next = buatPasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
+        tempPasien->next = buat_pasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
         tempPasien = tempPasien->next;
       }
     }
@@ -77,7 +77,7 @@ Pasien *bacaDataPasien(char *path)
   return daftarPasien;
 }
 
-Riwayat *bacaRiwayat(char *path)
+Riwayat *baca_riwayat(char *path)
 {
   FILE *fp = fopen(path, "r");
   if (fp == NULL)
@@ -106,19 +106,19 @@ Riwayat *bacaRiwayat(char *path)
       sscanf(buf, "%*d, %[^,], %*s %d, %[^,], %[^,], %[^,], %d",
              tempTanggal, &ID, tempDiagnosis, tempTindakan, tempKontrol, &biaya);
 
-      tanggal = bacaTanggal(tempTanggal, 2000);
-      kontrol = bacaTanggal(tempKontrol, 2000);
-      diagnosis = str2Diagnosis(tempDiagnosis);
-      tindakan = str2Tindakan(tempTindakan);
+      tanggal = baca_tanggal(tempTanggal, 2000);
+      kontrol = baca_tanggal(tempKontrol, 2000);
+      diagnosis = str_ke_diagnosis(tempDiagnosis);
+      tindakan = str_ke_tindakan(tempTindakan);
 
       if (daftarRiwayat == NULL)
       {
-        daftarRiwayat = buatRiwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
+        daftarRiwayat = buat_riwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
         tempRiwayat = daftarRiwayat;
       }
       else
       {
-        tempRiwayat->next = buatRiwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
+        tempRiwayat->next = buat_riwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
         tempRiwayat = tempRiwayat->next;
       }
     }
@@ -129,7 +129,7 @@ Riwayat *bacaRiwayat(char *path)
   return daftarRiwayat;
 }
 
-void bacaBiaya(char *path, int *biaya)
+void baca_biaya(char *path, int *biaya)
 {
   FILE *fp = fopen(path, "r");
 

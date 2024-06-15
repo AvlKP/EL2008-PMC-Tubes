@@ -5,14 +5,16 @@ set(SOURCES
   types.c
   files.c
   gui.c
-  pasienTab.c
+  pasien_tab.c
+  riwayat_tab.c
 )
 
 set(HEADERS
   types.h
   files.h
   gui.h
-  pasienTab.h
+  pasien_tab.h
+  riwayat_tab.h
 )
 
 project(

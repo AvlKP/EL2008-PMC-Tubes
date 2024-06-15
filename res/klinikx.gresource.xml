@@ -2,6 +2,8 @@
 <gresources>
   <gresource prefix="/com/github/AvlKP/KlinikX">
     <file>klinikx.ui</file>
-    <file>pasien.ui</file>
+    <file>pasien_form.ui</file>
+    <file>pasien_id.ui</file>
+    <file>pasien_info.ui</file>
   </gresource>
 </gresources>

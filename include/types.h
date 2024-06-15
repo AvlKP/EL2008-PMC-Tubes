@@ -1,4 +1,5 @@
 #pragma once
+#include <gtk/gtk.h>
 
 typedef enum diagnosis_t
 {
@@ -50,16 +51,31 @@ typedef struct riwayat_t
   struct riwayat_t *next;
 } Riwayat;
 
-Tanggal *buatTanggal(int hari, int bulan, int tahun);
-Pasien *buatPasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
-Riwayat *buatRiwayat(int ID, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
+typedef struct pasien_search_t {
+  Pasien *pasien;
+  struct pasien_search_t *next;
+} PasienSearch;
 
-void cetakTanggal(char *str, Tanggal *tanggal);
-void cetakPasien(Pasien *pasien);
-void cetakRiwayat(Riwayat *riwayat);
+typedef struct riwayat_search_t {
+  Riwayat *riwayat;
+  struct riwayat_search_t *next;
+} RiwayatSearch;
 
-void hapusPasien(Pasien *pasien);
-void hapusRiwayat(Riwayat *riwayat);
+Tanggal *buat_tanggal(int hari, int bulan, int tahun);
+Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
+Riwayat *buat_riwayat(int ID, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
 
-Diagnosis str2Diagnosis(char *str);
-Tindakan str2Tindakan(char *str);
+void cetak_tanggal(char *str, Tanggal *tanggal);
+void cetak_pasien(Pasien *pasien);
+void cetak_riwayat(Riwayat *riwayat);
+
+void hapus_pasien(Pasien *pasien);
+void hapus_riwayat(Riwayat *riwayat);
+
+Diagnosis str_ke_diagnosis(char *str);
+Tindakan str_ke_tindakan(char *str);
+
+void add_pasien(Pasien **head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
+void edit_pasien(Pasien *head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
+void delete_pasien(Pasien **head, int id);
+Pasien *search_pasien_by_id(Pasien *head, int id);

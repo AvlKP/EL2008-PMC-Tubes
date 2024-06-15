@@ -1,6 +1,6 @@
 #pragma once
 #include "types.h"
 
-Pasien *bacaDataPasien(char *path);
-Riwayat *bacaRiwayat(char *path);
-void bacaBiaya(char *path, int *biaya);
+Pasien *baca_data_pasien(char *path);
+Riwayat *baca_riwayat(char *path);
+void baca_biaya(char *path, int *biaya);
