@@ -182,6 +182,63 @@
             <property name="label">Pendapatan</property>
           </object>
         </child>
+        <!-- STATISTIK TAB -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Statistik Bulanan</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="hexpand">TRUE</property>
+                    <property name="vexpand">TRUE</property>
+                    <child>
+                      <object class="GtkTextView" id="tv_stat_bln">
+                        <property name="editable">FALSE</property>
+                        <property name="cursor-visible">TRUE</property>
+                        <property name="monospace">TRUE</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Statistik Tahunan</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="hexpand">TRUE</property>
+                    <property name="vexpand">TRUE</property>
+                    <child>
+                      <object class="GtkTextView" id="tv_stat_thn">
+                        <property name="editable">FALSE</property>
+                        <property name="cursor-visible">TRUE</property>
+                        <property name="monospace">TRUE</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="statistik_tab">
+            <property name="label">Statistik</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>

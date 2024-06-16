@@ -49,6 +49,29 @@ typedef struct pendapatan_thn_t {
   struct pendapatan_thn_t *next;
 } PendapatanTahunan;
 
+typedef struct stat_penyakit_t {
+  char nama[STRLEN];
+  int jumlah;
+  struct stat_penyakit_t *next;
+} StatPenyakit;
+
+typedef struct stat_bulanan_t
+{
+  int bulan;
+  int tahun;
+  int jumlah_pasien;
+  StatPenyakit *stat_penyakit;
+  struct stat_bulanan_t *next;
+} StatBulanan;
+
+typedef struct stat_tahunan_t
+{
+  int tahun;
+  int jumlah_pasien;
+  StatPenyakit *stat_penyakit;
+  struct stat_tahunan_t *next;
+} StatTahunan;
+
 Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS);
 Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
 
@@ -72,6 +95,11 @@ void delete_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, i
 
 PendapatanBulanan *buat_pendapatan_bln(int bulan, int tahun, int pendapatan);
 PendapatanTahunan *buat_pendapatan_thn(int tahun, int pendapatan);
-void tambah_pendapatan_bln(PendapatanBulanan **head, int bulan, int tahun, int pendapatan);
-void tambah_pendapatan_thn(PendapatanTahunan **head, int tahun, int pendapatan);
+void tambah_pendapatan_bln(PendapatanBulanan **head, Riwayat *riwayat);
+void tambah_pendapatan_thn(PendapatanTahunan **head, Riwayat *riwayat);
 double pendapatan_rata2_thn(PendapatanTahunan *head);
+void generate_pendapatan(PendapatanBulanan **pend_bln, PendapatanTahunan **pend_thn, Riwayat *riwayat);
+
+void cetak_stat_penyakit(char *str, StatPenyakit *stat);
+void generate_stat(StatBulanan **stat_bln, StatTahunan **stat_thn, Riwayat *riwayat);
+void sort_stat_penyakit(StatPenyakit **head);

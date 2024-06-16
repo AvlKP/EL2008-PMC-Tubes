@@ -15,7 +15,6 @@ typedef struct {
   GtkWidget *entry_bpjs;
 } PasienForm;
 
-void print_pasien_to_buffer(Pasien *pasien, GtkTextBuffer *buffer);
 void open_add_pasien(GtkButton *button, gpointer user_data);
 void open_edit_pasien(GtkButton *button, gpointer user_data);
 void open_delete_pasien(GtkButton *button, gpointer user_data);

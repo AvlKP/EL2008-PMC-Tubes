@@ -41,9 +41,12 @@ Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriks
 
 void cetak_tanggal(char *str, int hari, int bulan, int tahun)
 {
-  if (hari == 0) {
+  if (hari == 0)
+  {
     sprintf(str, "%s %d", MONTHS[bulan - 1], tahun);
-  } else {
+  }
+  else
+  {
     sprintf(str, "%d %s %d", hari, MONTHS[bulan - 1], tahun);
   }
 }
@@ -53,14 +56,14 @@ void cetak_pasien(Pasien *pasien)
   int i = 1;
   char tanggalLahir[20];
 
-  Pasien *curr = pasien;
-  while (curr != NULL)
+  Pasien *current = pasien;
+  while (current != NULL)
   {
-    cetak_tanggal(tanggalLahir, curr->hariLahir, curr->bulanLahir, curr->tahunLahir);
+    cetak_tanggal(tanggalLahir, current->hariLahir, current->bulanLahir, current->tahunLahir);
     printf("%d. %s | %s | %s | %s | %s | %d | %d | %d\n",
-           i, curr->nama, curr->alamat, curr->kota, curr->tempatLahir, tanggalLahir, curr->umur, curr->BPJS, curr->ID);
+           i, current->nama, current->alamat, current->kota, current->tempatLahir, tanggalLahir, current->umur, current->BPJS, current->ID);
     i++;
-    curr = curr->next;
+    current = current->next;
   }
 }
 
@@ -69,14 +72,14 @@ void cetak_riwayat(Riwayat *riwayat)
   int i = 1;
   char tanggalPeriksa[20], tanggalKontrol[20];
 
-  Riwayat *curr = riwayat;
-  while (curr != NULL)
+  Riwayat *current = riwayat;
+  while (current != NULL)
   {
-    cetak_tanggal(tanggalPeriksa, curr->hariPeriksa, curr->bulanPeriksa, curr->tahunPeriksa);
-    cetak_tanggal(tanggalKontrol, curr->hariKontrol, curr->bulanKontrol, curr->tahunKontrol);
-    printf("%d. %s | %d | %s | %s | %s | %d\n", i, tanggalPeriksa, curr->ID, curr->diagnosis, curr->tindakan, tanggalKontrol, curr->biaya);
+    cetak_tanggal(tanggalPeriksa, current->hariPeriksa, current->bulanPeriksa, current->tahunPeriksa);
+    cetak_tanggal(tanggalKontrol, current->hariKontrol, current->bulanKontrol, current->tahunKontrol);
+    printf("%d. %s | %d | %s | %s | %s | %d\n", i, tanggalPeriksa, current->ID, current->diagnosis, current->tindakan, tanggalKontrol, current->biaya);
     i++;
-    curr = curr->next;
+    current = current->next;
   }
 }
 
@@ -269,59 +272,43 @@ Riwayat *search_riwayat_by_id(Riwayat *head, int ID)
 
 // NO 4
 
-PendapatanBulanan *buat_pendapatan_bln(int bulan, int tahun, int pendapatan)
-{
-  PendapatanBulanan *newNode = malloc(sizeof(PendapatanBulanan));
-  newNode->bulan = bulan;
-  newNode->tahun = tahun;
-  newNode->pendapatan = pendapatan;
-  newNode->next = NULL;
-
-  return newNode;
-}
-
-PendapatanTahunan *buat_pendapatan_thn(int tahun, int pendapatan)
-{
-  PendapatanTahunan *newNode = malloc(sizeof(PendapatanTahunan));
-  newNode->tahun = tahun;
-  newNode->pendapatan = pendapatan;
-  newNode->next = NULL;
-
-  return newNode;
-}
-
-void tambah_pendapatan_bln(PendapatanBulanan **head, int bulan, int tahun, int pendapatan)
+void tambah_pendapatan_bln(PendapatanBulanan **head, Riwayat *riwayat)
 {
   PendapatanBulanan *current = *head;
   while (current != NULL)
   {
-    if (current->tahun == tahun && current->bulan == bulan)
+    if (current->tahun == riwayat->tahunPeriksa && current->bulan == riwayat->bulanPeriksa)
     {
-      current->pendapatan += pendapatan;
+      current->pendapatan += riwayat->biaya;
       return;
     }
     current = current->next;
   }
 
-  PendapatanBulanan *newNode = buat_pendapatan_bln(bulan, tahun, pendapatan);
+  PendapatanBulanan *newNode = malloc(sizeof(PendapatanBulanan));
+  newNode->bulan = riwayat->bulanPeriksa;
+  newNode->tahun = riwayat->tahunPeriksa;
+  newNode->pendapatan = riwayat->biaya;
   newNode->next = *head;
   *head = newNode;
 }
 
-void tambah_pendapatan_thn(PendapatanTahunan **head, int tahun, int pendapatan)
+void tambah_pendapatan_thn(PendapatanTahunan **head, Riwayat *riwayat)
 {
   PendapatanTahunan *current = *head;
   while (current != NULL)
   {
-    if (current->tahun == tahun)
+    if (current->tahun == riwayat->tahunPeriksa)
     {
-      current->pendapatan += pendapatan;
+      current->pendapatan += riwayat->biaya;
       return;
     }
     current = current->next;
   }
 
-  PendapatanTahunan *newNode = buat_pendapatan_thn(tahun, pendapatan);
+  PendapatanTahunan *newNode = malloc(sizeof(PendapatanTahunan));
+  newNode->tahun = riwayat->tahunPeriksa;
+  newNode->pendapatan = riwayat->biaya;
   newNode->next = *head;
   *head = newNode;
 }
@@ -332,11 +319,192 @@ double pendapatan_rata2_thn(PendapatanTahunan *head)
   int total_pendapatan = 0;
 
   PendapatanTahunan *current = head;
-  while (current != NULL) {
+  while (current != NULL)
+  {
     total_pendapatan += current->pendapatan;
     total_tahun++;
     current = current->next;
   }
-  if (total_tahun == 0) return 0;
+  if (total_tahun == 0)
+    return 0;
   return (double)(total_pendapatan / total_tahun);
 }
+
+void generate_pendapatan(PendapatanBulanan **pend_bln, PendapatanTahunan **pend_thn, Riwayat *riwayat)
+{
+  Riwayat *current = riwayat;
+  while (current != NULL)
+  {
+    tambah_pendapatan_bln(pend_bln, current);
+    tambah_pendapatan_thn(pend_thn, current);
+    current = current->next;
+  }
+}
+
+// NO 5
+
+StatPenyakit *buat_stat_penyakit(char *nama, int jumlah)
+{
+  StatPenyakit *newNode = malloc(sizeof(StatPenyakit));
+  strcpy(newNode->nama, nama);
+  newNode->jumlah = jumlah;
+  newNode->next = NULL;
+  return newNode;
+}
+
+void sort_stat_penyakit(StatPenyakit **head)
+{
+  int count = 0;
+  StatPenyakit *current = *head;
+  while (current != NULL)
+  {
+    count++;
+    current = current->next;
+  }
+
+  int jumlah[count];
+  char nama[count][STRLEN];
+
+  current = *head;
+  for (int i = 0; i < count; i++)
+  {
+    jumlah[i] = current->jumlah;
+    strncpy(nama[i], current->nama, STRLEN);
+    current = current->next;
+  }
+
+  for (int i = 0; i < count; i++)
+  {
+    for (int j = i + 1; j < count; j++)
+    {
+      if (jumlah[i] < jumlah[j])
+      {
+        int temp_jumlah = jumlah[i];
+        jumlah[i] = jumlah[j];
+        jumlah[j] = temp_jumlah;
+
+        char temp_nama[STRLEN];
+        strncpy(temp_nama, nama[i], STRLEN);
+        strncpy(nama[i], nama[j], STRLEN);
+        strncpy(nama[i], temp_nama, STRLEN);
+      }
+    }
+  }
+
+  StatPenyakit *sorted_head = NULL;
+  current = NULL;
+  for (int i = 0; i < count; i++)
+  {
+    StatPenyakit *new_node = buat_stat_penyakit(nama[i], jumlah[i]);
+    if (sorted_head == NULL)
+    {
+      sorted_head = new_node;
+      current = new_node;
+    }
+    else
+    {
+      current->next = new_node;
+      current = current->next;
+    }
+  }
+
+  StatPenyakit *temp = *head;
+  *head = sorted_head;
+  free(temp);
+}
+
+void tambah_stat_penyakit(StatPenyakit **head, char *diagnosis)
+{
+  StatPenyakit *current = *head;
+
+  while (current != NULL)
+  {
+    if (strcmp(current->nama, diagnosis) == 0)
+    {
+      current->jumlah++;
+      return;
+    }
+    current = current->next;
+  }
+
+  StatPenyakit *newNode = buat_stat_penyakit(diagnosis, 1);
+  newNode->next = *head;
+  *head = newNode;
+}
+
+void tambah_stat_bulanan(StatBulanan **head, Riwayat *riwayat)
+{
+  StatBulanan *current = *head;
+
+  while (current != NULL)
+  {
+    if (current->bulan == riwayat->bulanPeriksa && current->tahun == riwayat->tahunPeriksa)
+    {
+      current->jumlah_pasien++;
+      tambah_stat_penyakit(&(current->stat_penyakit), riwayat->diagnosis);
+      return;
+    }
+    current = current->next;
+  }
+
+  StatBulanan *newNode = malloc(sizeof(StatBulanan));
+  newNode->bulan = riwayat->bulanPeriksa;
+  newNode->tahun = riwayat->tahunPeriksa;
+  newNode->jumlah_pasien = 1;
+  newNode->stat_penyakit = NULL;
+  tambah_stat_penyakit(&(newNode->stat_penyakit), riwayat->diagnosis);
+  newNode->next = *head;
+  *head = newNode;
+}
+
+void tambah_stat_tahunan(StatTahunan **head, Riwayat *riwayat)
+{
+  StatTahunan *current = *head;
+
+  while (current != NULL)
+  {
+    if (current->tahun == riwayat->tahunPeriksa)
+    {
+      current->jumlah_pasien++;
+      tambah_stat_penyakit(&(current->stat_penyakit), riwayat->diagnosis);
+      return;
+    }
+    current = current->next;
+  }
+
+  StatTahunan *newNode = malloc(sizeof(StatTahunan));
+  newNode->tahun = riwayat->tahunPeriksa;
+  newNode->jumlah_pasien = 1;
+  newNode->stat_penyakit = NULL;
+  tambah_stat_penyakit(&(newNode->stat_penyakit), riwayat->diagnosis);
+  newNode->next = *head;
+  *head = newNode;
+}
+
+void generate_stat(StatBulanan **stat_bln, StatTahunan **stat_thn, Riwayat *riwayat)
+{
+  Riwayat *current = riwayat;
+  while (current != NULL)
+  {
+    tambah_stat_bulanan(stat_bln, current);
+    tambah_stat_tahunan(stat_thn, current);
+    current = current->next;
+  }
+}
+
+void cetak_stat_penyakit(char *str, StatPenyakit *stat)
+{
+  char temp[STRLEN];
+  str[0] = '\0';
+
+  StatPenyakit *current = stat;
+  while (current != NULL)
+  {
+    snprintf(temp, sizeof(temp), "%s (%d), ", current->nama, current->jumlah);
+    strcat(str, temp);
+    current = current->next;
+  }
+  str[strlen(str) - 2] = '\0';
+}
+
+// NO 6

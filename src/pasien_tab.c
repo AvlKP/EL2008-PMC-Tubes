@@ -1,46 +1,6 @@
 #include "pasien_tab.h"
 #include "riwayat_tab.h"
-
-void print_pasien_to_buffer(Pasien *pasien, GtkTextBuffer *buffer)
-{
-  gtk_text_buffer_set_text(buffer, "", -1);
-
-  GtkTextIter iter;
-  gtk_text_buffer_get_start_iter(buffer, &iter);
-
-  char line[LINEMAX];
-  snprintf(line, sizeof(line), "%-3s | %-10s | %-24s | %-24s | %-20s | %-20s | %-17s | %-4s | %-10s\n",
-           "No.", "ID Pasien", "Nama", "Alamat", "Kota", "Tempat Lahir", "Tanggal Lahir", "Umur", "No BPJS");
-  gtk_text_buffer_insert(buffer, &iter, line, -1);
-
-  Pasien *curr = pasien;
-  int counter = 0;
-  while (curr != NULL)
-  {
-    counter++;
-    curr = curr->next;
-  }
-
-  int i = 1;
-  char tanggalLahir[STRLEN];
-  curr = pasien;
-  while (curr != NULL)
-  {
-    cetak_tanggal(tanggalLahir, curr->hariLahir, curr->bulanLahir, curr->tahunLahir);
-    snprintf(line, sizeof(line), "%-3d | KX %7d | %-24s | %-24s | %-20s | %-20s | %-17s | %-4d | %10d\n",
-             i, curr->ID, curr->nama, curr->alamat, curr->kota, curr->tempatLahir, tanggalLahir, curr->umur, curr->BPJS);
-    gtk_text_buffer_insert(buffer, &iter, line, -1);
-    i++;
-    curr = curr->next;
-  }
-}
-
-void on_parent_win_destroy(GtkWindow *parent, gpointer user_data) {
-  GtkWidget *child = GTK_WIDGET(user_data);
-  if (GTK_IS_WINDOW(child)) {
-    gtk_window_destroy(GTK_WINDOW(child));
-  }
-}
+#include "buff_printer.h"
 
 void create_pasien_form(Pasien *old, GtkWidget **win_ref, GtkWidget **btn_submit_ref)
 {
@@ -203,6 +163,7 @@ void on_search_pasien_riwayat(GtkButton *button, gpointer user_data) {
   Riwayat **riwayat_ref = g_object_get_data(G_OBJECT(button), "riwayat_ref");
   Pasien *pasien = g_object_get_data(G_OBJECT(button), "pasien");
   
+  GtkWidget *parent_win = GTK_WIDGET(user_data);
   GtkWidget *win;
   GtkWidget *tv;
   GtkTextBuffer *tb;
@@ -218,8 +179,7 @@ void on_search_pasien_riwayat(GtkButton *button, gpointer user_data) {
   Riwayat *riwayat = search_riwayat_by_id(*riwayat_ref, pasien->ID);
   print_riwayat_to_buffer(riwayat, tb);
 
-  gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(user_data));
-  g_signal_connect(GTK_WINDOW(user_data), "destroy", G_CALLBACK(on_parent_win_destroy), win);
+  gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(parent_win));
   
   gtk_window_present(GTK_WINDOW(win));
 }

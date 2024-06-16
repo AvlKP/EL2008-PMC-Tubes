@@ -1,39 +1,5 @@
 #include "riwayat_tab.h"
-
-void print_riwayat_to_buffer(Riwayat *riwayat, GtkTextBuffer *buffer)
-{
-  gtk_text_buffer_set_text(buffer, "", -1);
-
-  GtkTextIter iter;
-  gtk_text_buffer_get_start_iter(buffer, &iter);
-
-  char line[LINEMAX];
-  snprintf(line, sizeof(line), "%-3s | %-17s | %-10s | %-11s | %-16s | %-17s | %-8s\n",
-           "No.", "Tanggal", "ID", "Diagnosis", "Tindakan", "Kontrol", "Biaya");
-  gtk_text_buffer_insert(buffer, &iter, line, -1);
-
-  Riwayat *curr = riwayat;
-  int counter = 0;
-  while (curr != NULL)
-  {
-    counter++;
-    curr = curr->next;
-  }
-
-  int i = 1;
-  char tanggalPeriksa[STRLEN], tanggalKontrol[STRLEN], diagnosis[STRLEN], tindakan[STRLEN];
-  curr = riwayat;
-  while (curr != NULL)
-  {
-    cetak_tanggal(tanggalPeriksa, curr->hariPeriksa, curr->bulanPeriksa, curr->tahunPeriksa);
-    cetak_tanggal(tanggalKontrol, curr->hariKontrol, curr->bulanKontrol, curr->tahunKontrol);
-    snprintf(line, sizeof(line), "%-3d | %-17s | KX %-7d | %-11s | %-16s | %-17s | %-8d\n",
-             i, tanggalPeriksa, curr->ID, curr->diagnosis, curr->tindakan, tanggalKontrol, curr->biaya);
-    gtk_text_buffer_insert(buffer, &iter, line, -1);
-    i++;
-    curr = curr->next;
-  }
-}
+#include "buff_printer.h"
 
 void create_riwayat_form(Riwayat *old, GtkWidget **win_ref, GtkWidget **btn_submit_ref)
 {

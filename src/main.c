@@ -3,27 +3,42 @@
 #include "types.h"
 #include "gui.h"
 
-void cetakPendBln(PendapatanBulanan *pend) {
-  printf("%-14s | %-15s\n", "Bulan", "Pendapatan");
-  
-  PendapatanBulanan *curr = pend;
-  char temp[STRLEN];
-  while (curr != NULL)
-  {
-    cetak_tanggal(temp, 0, curr->bulan, curr->tahun);
-    printf("%-14s | %-15d\n", temp, curr->pendapatan);
-    curr = curr->next;
-  }
-}
+// void cetakPendBln(PendapatanBulanan *pend) {
+//   printf("%-14s | %-15s\n", "Bulan", "Pendapatan");
 
-void cetakPendThn(PendapatanTahunan *pend) {
-  printf("%-5s | %-15s\n", "Tahun", "Pendapatan");
-  
-  PendapatanTahunan *curr = pend;
-  while (curr != NULL)
+//   PendapatanBulanan *current = pend;
+//   char temp[STRLEN];
+//   while (current != NULL)
+//   {
+//     cetak_tanggal(temp, 0, current->bulan, current->tahun);
+//     printf("%-14s | %-15d\n", temp, current->pendapatan);
+//     current = current->next;
+//   }
+// }
+
+// void cetakPendThn(PendapatanTahunan *pend) {
+//   printf("%-5s | %-15s\n", "Tahun", "Pendapatan");
+
+//   PendapatanTahunan *current = pend;
+//   while (current != NULL)
+//   {
+//     printf("%-5d | %-15d\n", current->tahun, current->pendapatan);
+//     current = current->next;
+//   }
+// }
+
+void cetakBln(StatBulanan *stat)
+{
+  printf("%-14s | %-13s | %-128s\n", "Bulan", "Jumlah Pasien", "Penyakit");
+
+  StatBulanan *current = stat;
+  char penyakit[LINEMAX], bulan[STRLEN];
+  while (current != NULL)
   {
-    printf("%-5d | %-15d\n", curr->tahun, curr->pendapatan);
-    curr = curr->next;
+    cetak_stat_penyakit(penyakit, stat->stat_penyakit);
+    cetak_tanggal(bulan, 0, current->bulan, current->tahun);
+    printf("%-14s | %-13d | %-128s", bulan, current->jumlah_pasien, penyakit);
+    current = current->next;
   }
 }
 
@@ -34,21 +49,11 @@ int main(int argc, char **argv)
   int biaya[6];
   baca_biaya("../data/Biaya.csv", biaya);
 
-  // Pasien *search_test = search_pasien_by_id(pasien, 1230123);
-  // cetak_pasien(search_test);
-  // cetak_riwayat(riwayat);
+  // StatBulanan *stat_bln = NULL;
+  // StatTahunan *stat_thn = NULL;
 
-  // PendapatanBulanan *pend_bln = NULL;
-  // PendapatanTahunan *pend_thn = NULL;
-
-  // Riwayat *curr = riwayat;
-  // while (curr != NULL) {
-  //   tambah_pendapatan_bln(&pend_bln, curr->bulanPeriksa, curr->tahunPeriksa, curr->biaya);
-  //   tambah_pendapatan_thn(&pend_thn, curr->tahunPeriksa, curr->biaya);
-  //   curr = curr->next;
-  // }
-  // cetakPendBln(pend_bln);
-  // cetakPendThn(pend_thn);
+  // generate_stat(&stat_bln, &stat_thn, riwayat);
+  // cetakBln(stat_bln);
 
   GtkApplication *app;
   int status;
