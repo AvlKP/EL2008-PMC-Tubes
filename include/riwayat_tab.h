@@ -15,7 +15,6 @@ typedef struct {
   GtkWidget *entry_biaya;
 } RiwayatForm;
 
-void print_riwayat_to_buffer(Riwayat *riwayat, GtkTextBuffer *buffer);
 void open_add_riwayat(GtkButton *button, gpointer user_data);
 void open_edit_riwayat(GtkButton *button, gpointer user_data);
 void open_delete_riwayat(GtkButton *button, gpointer user_data);

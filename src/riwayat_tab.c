@@ -103,7 +103,7 @@ void on_add_riwayat(GtkButton *button, gpointer user_data)
   char *tindakan = gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tindakan));
 
   add_riwayat(riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun, diagnosis, tindakan, tglk_hari, tglk_bulan, tglk_tahun, biaya);
-  print_riwayat_to_buffer(*(riwayat_ref), tb);
+  print_riwayat_to_buffer(riwayat_ref, tb);
 
   g_free(form_data);
   gtk_window_close(GTK_WINDOW(user_data));
@@ -128,7 +128,7 @@ void on_edit_riwayat(GtkButton *button, gpointer user_data)
   char *tindakan = gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tindakan));
 
   edit_riwayat(riwayat, id, tglp_hari, tglp_bulan, tglp_tahun, diagnosis, tindakan, tglk_hari, tglk_bulan, tglk_tahun, biaya);
-  print_riwayat_to_buffer(*(riwayat_ref), tb);
+  print_riwayat_to_buffer(riwayat_ref, tb);
 
   g_free(form_data);
   gtk_window_close(GTK_WINDOW(user_data));
@@ -151,9 +151,11 @@ void on_edit_riwayat_entry(GtkButton *button, gpointer user_data)
 
   gtk_window_close(GTK_WINDOW(user_data));
 
+  Riwayat *riwayat = search_riwayat_by_id_and_tanggal(*riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun);
+  if (riwayat == NULL) return;
+
   GtkWidget *win;
   GtkWidget *btn_submit;
-  Riwayat *riwayat = search_riwayat_by_id_and_tanggal(*riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun);
 
   create_riwayat_form(riwayat, &win, &btn_submit);
 
@@ -183,7 +185,7 @@ void on_delete_riwayat(GtkButton *button, gpointer user_data)
   int tglp_tahun = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_tahun)));
 
   delete_riwayat(riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun);
-  print_riwayat_to_buffer(*(riwayat_ref), tb);
+  print_riwayat_to_buffer(riwayat_ref, tb);
   gtk_window_close(GTK_WINDOW(user_data));
 }
 
@@ -202,7 +204,9 @@ void on_search_riwayat_entry(GtkButton *button, gpointer user_data) {
 
   gtk_window_close(GTK_WINDOW(user_data));
 
-  Riwayat *riwayat = search_riwayat_by_id(*riwayat_ref, id);
+  Riwayat *riwayat = search_riwayat_by_id_and_tanggal(*riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun);
+  if (riwayat == NULL) return;
+
   GtkWidget *win;
   GtkWidget *label_tglp, *label_id, *label_diagnosis, *label_tindakan, *label_tglk, *label_biaya;
   GtkBuilder *builder;

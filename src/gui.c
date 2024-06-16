@@ -22,8 +22,8 @@ void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer u
 
     char temp[STRLEN];
     snprintf(temp, sizeof(temp), "%.2f", pendapatan_rata2_thn(pend_thn));
-    print_pendapatan_bln_to_buffer(pend_bln, tb_pend_bln);
-    print_pendapatan_thn_to_buffer(pend_thn, tb_pend_thn);
+    print_pendapatan_bln_to_buffer(&pend_bln, tb_pend_bln);
+    print_pendapatan_thn_to_buffer(&pend_thn, tb_pend_thn);
     gtk_label_set_text(GTK_LABEL(label_pend_avg), temp);
   }
   else if (page_num == 3)
@@ -50,8 +50,8 @@ void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer u
       current_thn = current_thn->next;
     }
 
-    print_stat_bln_to_buffer(stat_bln, tb_stat_bln);
-    print_stat_thn_to_buffer(stat_thn, tb_stat_thn);
+    print_stat_bln_to_buffer(&stat_bln, tb_stat_bln);
+    print_stat_thn_to_buffer(&stat_thn, tb_stat_thn);
   }
   else if (page_num == 4)
   {
@@ -86,7 +86,7 @@ void activate(GtkApplication *app, gpointer user_data)
   btn_pasien[1] = GTK_WIDGET(gtk_builder_get_object(builder, "btn_ubah_pasien"));
   btn_pasien[2] = GTK_WIDGET(gtk_builder_get_object(builder, "btn_hapus_pasien"));
   btn_pasien[3] = GTK_WIDGET(gtk_builder_get_object(builder, "btn_cari_pasien"));
-  print_pasien_to_buffer(*pasien_ref, tb_pasien);
+  print_pasien_to_buffer(pasien_ref, tb_pasien);
 
   for (int i = 0; i < 4; i++)
   {
@@ -113,7 +113,7 @@ void activate(GtkApplication *app, gpointer user_data)
   btn_riwayat[1] = GTK_WIDGET(gtk_builder_get_object(builder, "btn_ubah_riwayat"));
   btn_riwayat[2] = GTK_WIDGET(gtk_builder_get_object(builder, "btn_hapus_riwayat"));
   btn_riwayat[3] = GTK_WIDGET(gtk_builder_get_object(builder, "btn_cari_riwayat"));
-  print_riwayat_to_buffer(*riwayat_ref, tb_riwayat);
+  print_riwayat_to_buffer(riwayat_ref, tb_riwayat);
 
   for (int i = 0; i < 4; i++)
   {

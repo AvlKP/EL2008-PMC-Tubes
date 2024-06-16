@@ -92,7 +92,7 @@ void on_add_pasien(GtkButton *button, gpointer user_data)
   int bpjs = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_bpjs)));
 
   add_pasien(pasien_ref, id, nama, alamat, kota, templ, tgll_hari, tgll_bulan, tgll_tahun, umur, bpjs);
-  print_pasien_to_buffer(*(pasien_ref), tb);
+  print_pasien_to_buffer(pasien_ref, tb);
 
   g_free(form_data);
   gtk_window_close(GTK_WINDOW(user_data));
@@ -116,7 +116,7 @@ void on_edit_pasien(GtkButton *button, gpointer user_data) {
   int bpjs = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_bpjs)));
 
   edit_pasien(pasien, id, nama, alamat, kota, templ, tgll_hari, tgll_bulan, tgll_tahun, umur, bpjs);
-  print_pasien_to_buffer(*(pasien_ref), tb);
+  print_pasien_to_buffer(pasien_ref, tb);
   g_free(form_data);
   gtk_window_close(GTK_WINDOW(user_data));
 }
@@ -130,14 +130,16 @@ void on_edit_pasien_entry(GtkButton *button, gpointer user_data) {
 
   gtk_window_close(GTK_WINDOW(user_data));
 
+  Pasien *pasien = search_pasien_by_id(*pasien_ref, id);
+  if (pasien == NULL) return;
+
   GtkWidget *win;
   GtkWidget *btn_submit;
-  Pasien *pasien = search_pasien_by_id(*pasien_ref, id);
 
   create_pasien_form(pasien, &win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
-  gtk_window_set_title(GTK_WINDOW(win), "Edit Pasien");
+  gtk_window_set_title(GTK_WINDOW(win), "Ubah Pasien");
   g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_edit_pasien), (gpointer)win);
   
   g_object_set_data(G_OBJECT(btn_submit), "pasien_ref", pasien_ref);
@@ -155,7 +157,7 @@ void on_delete_pasien(GtkButton *button, gpointer user_data)
   int id = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_pid)));
 
   delete_pasien(pasien_ref, id);
-  print_pasien_to_buffer(*(pasien_ref), tb);
+  print_pasien_to_buffer(pasien_ref, tb);
   gtk_window_close(GTK_WINDOW(user_data));
 }
 
@@ -177,7 +179,7 @@ void on_search_pasien_riwayat(GtkButton *button, gpointer user_data) {
   tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv));
 
   Riwayat *riwayat = search_riwayat_by_id(*riwayat_ref, pasien->ID);
-  print_riwayat_to_buffer(riwayat, tb);
+  print_riwayat_to_buffer(&riwayat, tb);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(parent_win));
   
@@ -194,6 +196,8 @@ void on_search_pasien_entry(GtkButton *button, gpointer user_data) {
   gtk_window_close(GTK_WINDOW(user_data));
 
   Pasien *pasien = search_pasien_by_id(*pasien_ref, id);
+  if (pasien == NULL) return;
+
   GtkWidget *win;
   GtkWidget *label_id, *label_nama, *label_alamat, *label_kota, *label_templ, *label_tgll, *label_umur, *label_bpjs;
   GtkWidget *btn_info;

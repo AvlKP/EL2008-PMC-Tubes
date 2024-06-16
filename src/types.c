@@ -3,6 +3,8 @@
 #include <string.h>
 #include "types.h"
 
+// BASE
+
 Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS)
 {
   Pasien *pasien = malloc(sizeof(Pasien));
@@ -354,63 +356,37 @@ StatPenyakit *buat_stat_penyakit(char *nama, int jumlah)
 
 void sort_stat_penyakit(StatPenyakit **head)
 {
-  int count = 0;
-  StatPenyakit *current = *head;
-  while (current != NULL)
-  {
-    count++;
-    current = current->next;
-  }
+  int swapped;
+  StatPenyakit **h;
+  StatPenyakit *p1, *p2, *temp;
+  StatPenyakit *lptr = NULL;
 
-  int jumlah[count];
-  char nama[count][STRLEN];
+  if (*head == NULL)
+    return;
 
-  current = *head;
-  for (int i = 0; i < count; i++)
+  do
   {
-    jumlah[i] = current->jumlah;
-    strncpy(nama[i], current->nama, STRLEN);
-    current = current->next;
-  }
+    swapped = 0;
+    h = head;
 
-  for (int i = 0; i < count; i++)
-  {
-    for (int j = i + 1; j < count; j++)
+    while ((*h)->next != lptr)
     {
-      if (jumlah[i] < jumlah[j])
+      p1 = *h;
+      p2 = p1->next;
+
+      if (p1->jumlah < p2->jumlah)
       {
-        int temp_jumlah = jumlah[i];
-        jumlah[i] = jumlah[j];
-        jumlah[j] = temp_jumlah;
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
 
-        char temp_nama[STRLEN];
-        strncpy(temp_nama, nama[i], STRLEN);
-        strncpy(nama[i], nama[j], STRLEN);
-        strncpy(nama[i], temp_nama, STRLEN);
+        swapped = 1;
       }
+      h = &(*h)->next;
     }
-  }
-
-  StatPenyakit *sorted_head = NULL;
-  current = NULL;
-  for (int i = 0; i < count; i++)
-  {
-    StatPenyakit *new_node = buat_stat_penyakit(nama[i], jumlah[i]);
-    if (sorted_head == NULL)
-    {
-      sorted_head = new_node;
-      current = new_node;
-    }
-    else
-    {
-      current->next = new_node;
-      current = current->next;
-    }
-  }
-
-  StatPenyakit *temp = *head;
-  *head = sorted_head;
-  free(temp);
+    lptr = *h;
+  } while (swapped);
 }
 
 void tambah_stat_penyakit(StatPenyakit **head, char *diagnosis)
@@ -548,3 +524,218 @@ Riwayat *cari_kontrol_akhir(Riwayat *head, int ID)
 }
 
 // Utilities
+
+void sort_pasien_id(Pasien **head)
+{
+  int swapped;
+  Pasien **h;
+  Pasien *p1, *p2, *temp;
+  Pasien *lptr = NULL;
+
+  if (*head == NULL)
+    return;
+
+  do
+  {
+    swapped = 0;
+    h = head;
+
+    while ((*h)->next != lptr)
+    {
+      p1 = *h;
+      p2 = p1->next;
+
+      if (p1->ID > p2->ID)
+      {
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
+
+        swapped = 1;
+      }
+      h = &(*h)->next;
+    }
+    lptr = *h;
+  } while (swapped);
+}
+
+void sort_riwayat_tanggal(Riwayat **head)
+{
+  int swapped;
+  Riwayat **h;
+  Riwayat *p1, *p2, *temp;
+  Riwayat *lptr = NULL;
+
+  if (*head == NULL)
+    return;
+
+  do
+  {
+    swapped = 0;
+    h = head;
+
+    while ((*h)->next != lptr)
+    {
+      p1 = *h;
+      p2 = p1->next;
+
+      if (banding_tanggal(p1->hariPeriksa, p1->bulanPeriksa, p1->tahunPeriksa,
+                          p2->hariPeriksa, p2->bulanPeriksa, p2->tahunPeriksa))
+      {
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
+
+        swapped = 1;
+      }
+      h = &(*h)->next;
+    }
+    lptr = *h;
+  } while (swapped);
+}
+
+void sort_pendapatan_bln(PendapatanBulanan **head)
+{
+  int swapped;
+  PendapatanBulanan **h;
+  PendapatanBulanan *p1, *p2, *temp;
+  PendapatanBulanan *lptr = NULL;
+
+  if (*head == NULL)
+    return;
+
+  do
+  {
+    swapped = 0;
+    h = head;
+
+    while ((*h)->next != lptr)
+    {
+      p1 = *h;
+      p2 = p1->next;
+
+      if (banding_tanggal(0, p1->bulan, p1->tahun,
+                          0, p2->bulan, p2->tahun))
+      {
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
+
+        swapped = 1;
+      }
+      h = &(*h)->next;
+    }
+    lptr = *h;
+  } while (swapped);
+}
+
+void sort_pendapatan_thn(PendapatanTahunan **head)
+{
+  int swapped;
+  PendapatanTahunan **h;
+  PendapatanTahunan *p1, *p2, *temp;
+  PendapatanTahunan *lptr = NULL;
+
+  if (*head == NULL)
+    return;
+
+  do
+  {
+    swapped = 0;
+    h = head;
+
+    while ((*h)->next != lptr)
+    {
+      p1 = *h;
+      p2 = p1->next;
+
+      if (banding_tanggal(0, 0, p1->tahun,
+                          0, 0, p2->tahun))
+      {
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
+
+        swapped = 1;
+      }
+      h = &(*h)->next;
+    }
+    lptr = *h;
+  } while (swapped);
+}
+
+void sort_stat_bln(StatBulanan **head)
+{
+  int swapped;
+  StatBulanan **h;
+  StatBulanan *p1, *p2, *temp;
+  StatBulanan *lptr = NULL;
+
+  if (*head == NULL)
+    return;
+
+  do
+  {
+    swapped = 0;
+    h = head;
+
+    while ((*h)->next != lptr)
+    {
+      p1 = *h;
+      p2 = p1->next;
+
+      if (banding_tanggal(0, p1->bulan, p1->tahun,
+                          0, p2->bulan, p2->tahun))
+      {
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
+
+        swapped = 1;
+      }
+      h = &(*h)->next;
+    }
+    lptr = *h;
+  } while (swapped);
+}
+
+void sort_stat_thn(StatTahunan **head)
+{
+  int swapped;
+  StatTahunan **h;
+  StatTahunan *p1, *p2, *temp;
+  StatTahunan *lptr = NULL;
+
+  if (*head == NULL)
+    return;
+
+  do
+  {
+    swapped = 0;
+    h = head;
+
+    while ((*h)->next != lptr)
+    {
+      p1 = *h;
+      p2 = p1->next;
+
+      if (banding_tanggal(0, 0, p1->tahun,
+                          0, 0, p2->tahun))
+      {
+        temp = p2->next;
+        p2->next = p1;
+        p1->next = temp;
+        *h = p2;
+
+        swapped = 1;
+      }
+      h = &(*h)->next;
+    }
+    lptr = *h;
+  } while (swapped);
+}

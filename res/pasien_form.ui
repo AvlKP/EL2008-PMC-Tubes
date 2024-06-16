@@ -3,9 +3,12 @@
   <object class="GtkWindow" id="window">
     <property name="modal">TRUE</property>
     <property name="default-width">300</property>
-    <property name="default-height">400</property>
     <child>
       <object class="GtkGrid">
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
         <property name="row-spacing">5</property>
         <property name="column-spacing">10</property>
         <child>
@@ -19,6 +22,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_id">
+            <property name="max-length">7</property>
             <property name="placeholder-text">ID</property>
             <layout>
               <property name="column">1</property>
@@ -37,12 +41,13 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_nama">
+            <property name="max-length">24</property>
             <property name="placeholder-text">Nama</property>
             <layout>
               <property name="column">1</property>
               <property name="row">1</property>
             </layout>
-          </object>   
+          </object>
         </child>
         <child>
           <object class="GtkLabel">
@@ -55,6 +60,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_alamat">
+            <property name="max-length">24</property>
             <property name="placeholder-text">Alamat</property>
             <layout>
               <property name="column">1</property>
@@ -73,6 +79,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_kota">
+            <property name="max-length">20</property>
             <property name="placeholder-text">Kota</property>
             <layout>
               <property name="column">1</property>
@@ -91,6 +98,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_templ">
+            <property name="max-length">20</property>
             <property name="placeholder-text">Tempat Lahir</property>
             <layout>
               <property name="column">1</property>
@@ -109,19 +117,23 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="spacing">4</property>
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkEntry" id="entry_tgll_hari">
+                <property name="max-length">2</property>
                 <property name="placeholder-text">Hari</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="entry_tgll_bulan">
+                <property name="max-length">2</property>
                 <property name="placeholder-text">Bulan</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="entry_tgll_tahun">
+                <property name="max-length">4</property>
                 <property name="placeholder-text">Tahun</property>
               </object>
             </child>
@@ -142,6 +154,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_umur">
+            <property name="max-length">3</property>
             <property name="placeholder-text">Umur</property>
             <layout>
               <property name="column">1</property>
@@ -160,6 +173,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_bpjs">
+            <property name="max-length">10</property>
             <property name="placeholder-text">No BPJS</property>
             <layout>
               <property name="column">1</property>

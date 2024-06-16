@@ -5,6 +5,10 @@
     <property name="default-width">300</property>
     <child>
       <object class="GtkGrid">
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
         <property name="row-spacing">5</property>
         <property name="column-spacing">10</property>
         <child>
@@ -18,19 +22,23 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="spacing">4</property>
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkEntry" id="entry_tglp_hari">
+                <property name="max-length">2</property>
                 <property name="placeholder-text">Hari</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="entry_tglp_bulan">
+                <property name="max-length">2</property>
                 <property name="placeholder-text">Bulan</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="entry_tglp_tahun">
+                <property name="max-length">4</property>
                 <property name="placeholder-text">Tahun</property>
               </object>
             </child>
@@ -51,6 +59,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_id">
+            <property name="max-length">7</property>
             <property name="placeholder-text">ID</property>
             <layout>
               <property name="column">1</property>
@@ -69,6 +78,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_diagnosis">
+            <property name="max-length">16</property>
             <property name="placeholder-text">Diagnosis</property>
             <layout>
               <property name="column">1</property>
@@ -87,6 +97,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_tindakan">
+            <property name="max-length">16</property>
             <property name="placeholder-text">Tindakan</property>
             <layout>
               <property name="column">1</property>
@@ -105,19 +116,23 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="spacing">4</property>
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkEntry" id="entry_tglk_hari">
+                <property name="max-length">2</property>
                 <property name="placeholder-text">Hari</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="entry_tglk_bulan">
+                <property name="max-length">2</property>
                 <property name="placeholder-text">Bulan</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="entry_tglk_tahun">
+                <property name="max-length">4</property>
                 <property name="placeholder-text">Tahun</property>
               </object>
             </child>
@@ -138,6 +153,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_biaya">
+            <property name="max-length">9</property>
             <property name="placeholder-text">Biaya</property>
             <layout>
               <property name="column">1</property>

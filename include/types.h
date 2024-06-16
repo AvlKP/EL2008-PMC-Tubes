@@ -101,3 +101,10 @@ void generate_stat(StatBulanan **stat_bln, StatTahunan **stat_thn, Riwayat *riwa
 void sort_stat_penyakit(StatPenyakit **head);
 
 Riwayat *cari_kontrol_akhir(Riwayat *head, int ID);
+
+void sort_pasien_id(Pasien **head);
+void sort_riwayat_tanggal(Riwayat **head);
+void sort_pendapatan_bln(PendapatanBulanan **head);
+void sort_pendapatan_thn(PendapatanTahunan **head);
+void sort_stat_bln(StatBulanan **head);
+void sort_stat_thn(StatTahunan **head);

@@ -13,9 +13,15 @@
         <child>
           <object class="GtkBox" id="pasien_box">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
+            <property name="spacing">10</property>
             <child>
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="spacing">10</property>
                 <child>
                   <object class="GtkButton" id="btn_buat_pasien">
                     <property name="label">Buat</property>
@@ -61,9 +67,15 @@
         <!-- RIWAYAT TAB -->
         <child>
           <object class="GtkBox" id="riwayat_box">
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
+            <property name="spacing">10</property>
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkBox">
+                <property name="spacing">10</property>
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <child>
                   <object class="GtkButton" id="btn_buat_riwayat">
@@ -110,9 +122,15 @@
         <!-- PENDAPATAN TAB -->
         <child>
           <object class="GtkBox">
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
+            <property name="spacing">10</property>
             <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
             <child>
               <object class="GtkBox">
+                <property name="spacing">12</property>
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkLabel">
@@ -185,6 +203,11 @@
         <!-- STATISTIK TAB -->
         <child>
           <object class="GtkBox">
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
+            <property name="spacing">10</property>
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkBox">
@@ -242,6 +265,10 @@
         <!-- KONTROL TAB -->
         <child>
           <object class="GtkScrolledWindow">
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
             <property name="hexpand">TRUE</property>
             <property name="vexpand">TRUE</property>
             <child>

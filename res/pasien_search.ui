@@ -2,9 +2,13 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="modal">TRUE</property>
-    <property name="name">Informasi Pasien</property>
+    <property name="title">Informasi Pasien</property>
     <child>
       <object class="GtkGrid">
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
         <property name="row-spacing">5</property>
         <property name="column-spacing">10</property>
         <child>
@@ -161,6 +165,10 @@
     <property name="title">Riwayat Pasien</property>
     <child>
       <object class="GtkScrolledWindow">
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
         <property name="hexpand">TRUE</property>
         <property name="vexpand">TRUE</property>
         <child>

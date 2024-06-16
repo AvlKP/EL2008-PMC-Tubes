@@ -5,6 +5,10 @@
     <property name="title">Informasi Riwayat Pemeriksaan</property>
     <child>
       <object class="GtkGrid">
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
         <property name="row-spacing">5</property>
         <property name="column-spacing">10</property>
         <child>
