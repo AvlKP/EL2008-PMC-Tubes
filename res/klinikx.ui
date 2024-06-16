@@ -239,6 +239,25 @@
             <property name="label">Statistik</property>
           </object>
         </child>
+        <!-- KONTROL TAB -->
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hexpand">TRUE</property>
+            <property name="vexpand">TRUE</property>
+            <child>
+              <object class="GtkTextView" id="tv_kontrol">
+                <property name="editable">FALSE</property>
+                <property name="cursor-visible">TRUE</property>
+                <property name="monospace">TRUE</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="kontrol_tab">
+            <property name="label">Kontrol</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>

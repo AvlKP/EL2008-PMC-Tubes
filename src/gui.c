@@ -8,6 +8,7 @@
 void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer user_data)
 {
   Riwayat **riwayat_ref = g_object_get_data(G_OBJECT(nb), "riwayat_ref");
+  Pasien **pasien_ref = g_object_get_data(G_OBJECT(nb), "pasien_ref");
   if (page_num == 2)
   {
     GtkTextBuffer *tb_pend_bln = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_pend_bln"));
@@ -25,7 +26,8 @@ void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer u
     print_pendapatan_thn_to_buffer(pend_thn, tb_pend_thn);
     gtk_label_set_text(GTK_LABEL(label_pend_avg), temp);
   }
-  if (page_num == 3) {
+  else if (page_num == 3)
+  {
     GtkTextBuffer *tb_stat_bln = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_stat_bln"));
     GtkTextBuffer *tb_stat_thn = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_stat_thn"));
 
@@ -35,19 +37,26 @@ void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer u
     generate_stat(&stat_bln, &stat_thn, *riwayat_ref);
 
     StatBulanan *current_bln = stat_bln;
-    while (current_bln != NULL) {
+    while (current_bln != NULL)
+    {
       sort_stat_penyakit(&(current_bln->stat_penyakit));
       current_bln = current_bln->next;
     }
 
     StatTahunan *current_thn = stat_thn;
-    while (current_thn != NULL) {
+    while (current_thn != NULL)
+    {
       sort_stat_penyakit(&(current_thn->stat_penyakit));
       current_thn = current_thn->next;
     }
 
     print_stat_bln_to_buffer(stat_bln, tb_stat_bln);
     print_stat_thn_to_buffer(stat_thn, tb_stat_thn);
+  }
+  else if (page_num == 4)
+  {
+    GtkTextBuffer *tb_kontrol = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_kontrol"));
+    print_kontrol_to_buffer(*pasien_ref, *riwayat_ref, tb_kontrol);
   }
 }
 
@@ -147,7 +156,18 @@ void activate(GtkApplication *app, gpointer user_data)
   g_object_set_data(G_OBJECT(nb), "tb_stat_bln", tb_stat_bln);
   g_object_set_data(G_OBJECT(nb), "tb_stat_thn", tb_stat_thn);
 
+  // Kontrol Tab
+
+  GtkWidget *tv_kontrol;
+  GtkTextBuffer *tb_kontrol;
+
+  tv_kontrol = GTK_WIDGET(gtk_builder_get_object(builder, "tv_kontrol"));
+  tb_kontrol = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv_kontrol));
+
+  g_object_set_data(G_OBJECT(nb), "tb_kontrol", tb_kontrol);
+
   g_object_set_data(G_OBJECT(nb), "riwayat_ref", riwayat_ref);
+  g_object_set_data(G_OBJECT(nb), "pasien_ref", pasien_ref);
   g_signal_connect(nb, "switch-page", G_CALLBACK(on_page_change), NULL);
   g_object_unref(builder);
   gtk_window_present(GTK_WINDOW(win));

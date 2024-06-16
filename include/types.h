@@ -93,13 +93,11 @@ Riwayat *search_riwayat_by_id(Riwayat *head, int ID);
 void edit_riwayat(Riwayat *head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
 void delete_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa);
 
-PendapatanBulanan *buat_pendapatan_bln(int bulan, int tahun, int pendapatan);
-PendapatanTahunan *buat_pendapatan_thn(int tahun, int pendapatan);
-void tambah_pendapatan_bln(PendapatanBulanan **head, Riwayat *riwayat);
-void tambah_pendapatan_thn(PendapatanTahunan **head, Riwayat *riwayat);
 double pendapatan_rata2_thn(PendapatanTahunan *head);
 void generate_pendapatan(PendapatanBulanan **pend_bln, PendapatanTahunan **pend_thn, Riwayat *riwayat);
 
 void cetak_stat_penyakit(char *str, StatPenyakit *stat);
 void generate_stat(StatBulanan **stat_bln, StatTahunan **stat_thn, Riwayat *riwayat);
 void sort_stat_penyakit(StatPenyakit **head);
+
+Riwayat *cari_kontrol_akhir(Riwayat *head, int ID);

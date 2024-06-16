@@ -8,3 +8,4 @@ void print_pendapatan_bln_to_buffer(PendapatanBulanan *pendapatan, GtkTextBuffer
 void print_pendapatan_thn_to_buffer(PendapatanTahunan *pendapatan, GtkTextBuffer *buffer);
 void print_stat_bln_to_buffer(StatBulanan *stat_thn, GtkTextBuffer *buffer);
 void print_stat_thn_to_buffer(StatTahunan *stat_thn, GtkTextBuffer *buffer);
+void print_kontrol_to_buffer(Pasien *pasien, Riwayat *riwayat, GtkTextBuffer *buffer);

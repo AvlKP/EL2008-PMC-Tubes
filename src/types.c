@@ -508,3 +508,43 @@ void cetak_stat_penyakit(char *str, StatPenyakit *stat)
 }
 
 // NO 6
+
+int banding_tanggal(int hari1, int bulan1, int tahun1, int hari2, int bulan2, int tahun2)
+{
+  // return 1 jika tanggal 1 lebih baru
+  if (tahun1 > tahun2)
+    return 1;
+  if (tahun1 < tahun2)
+    return 0;
+  if (bulan1 > bulan2)
+    return 1;
+  if (bulan1 < bulan2)
+    return 0;
+  if (hari1 > hari2)
+    return 1;
+  return 0;
+}
+
+Riwayat *cari_kontrol_akhir(Riwayat *head, int ID)
+{
+  Riwayat *riwayat = NULL;
+
+  Riwayat *current = head;
+  while (current != NULL)
+  {
+    if (current->ID == ID)
+    {
+      if (riwayat == NULL ||
+          banding_tanggal(current->hariKontrol, current->bulanKontrol, current->tahunKontrol,
+                          riwayat->hariKontrol, riwayat->bulanKontrol, riwayat->tahunKontrol))
+      {
+        riwayat = current;
+      }
+    }
+    current = current->next;
+  }
+
+  return riwayat;
+}
+
+// Utilities
