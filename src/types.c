@@ -189,36 +189,6 @@ Riwayat *search_riwayat_by_id_and_tanggal(Riwayat *head, int ID, int hariPeriksa
   return NULL;
 }
 
-Riwayat *search_riwayat_by_id(Riwayat *head, int ID)
-{
-  Riwayat *result_head = NULL;
-  Riwayat *result_tail = NULL;
-  Riwayat *current = head;
-
-  while (current != NULL)
-  {
-    if (current->ID == ID)
-    {
-      Riwayat *new_result = malloc(sizeof(Riwayat));
-      *new_result = *current;
-      new_result->next = NULL;
-
-      if (result_head == NULL)
-      {
-        result_head = new_result;
-        result_tail = new_result;
-      }
-      else
-      {
-        result_tail->next = new_result;
-        result_tail = new_result;
-      }
-    }
-    current = current->next;
-  }
-  return result_head;
-}
-
 void edit_riwayat(Riwayat *head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya)
 {
   head->ID = ID;
@@ -259,4 +229,110 @@ void delete_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, i
     previous = current;
     current = current->next;
   }
+}
+
+// NO 3
+
+Riwayat *search_riwayat_by_id(Riwayat *head, int ID)
+{
+  Riwayat *result_head = NULL;
+  Riwayat *result_tail = NULL;
+  Riwayat *current = head;
+
+  while (current != NULL)
+  {
+    if (current->ID == ID)
+    {
+      Riwayat *new_result = malloc(sizeof(Riwayat));
+      *new_result = *current;
+      new_result->next = NULL;
+
+      if (result_head == NULL)
+      {
+        result_head = new_result;
+        result_tail = new_result;
+      }
+      else
+      {
+        result_tail->next = new_result;
+        result_tail = new_result;
+      }
+    }
+    current = current->next;
+  }
+  return result_head;
+}
+
+// NO 4
+
+PendapatanBulanan *buat_pendapatan_bln(int bulan, int tahun, int pendapatan)
+{
+  PendapatanBulanan *newNode = malloc(sizeof(PendapatanBulanan));
+  newNode->bulan = bulan;
+  newNode->tahun = tahun;
+  newNode->pendapatan = pendapatan;
+  newNode->next = NULL;
+
+  return newNode;
+}
+
+PendapatanTahunan *buat_pendapatan_thn(int tahun, int pendapatan)
+{
+  PendapatanTahunan *newNode = malloc(sizeof(PendapatanTahunan));
+  newNode->tahun = tahun;
+  newNode->pendapatan = pendapatan;
+  newNode->next = NULL;
+
+  return newNode;
+}
+
+void tambah_pendapatan_bln(PendapatanBulanan **head, int bulan, int tahun, int pendapatan)
+{
+  PendapatanBulanan *current = *head;
+  while (current != NULL)
+  {
+    if (current->tahun == tahun && current->bulan == bulan)
+    {
+      current->pendapatan += pendapatan;
+      return;
+    }
+    current = current->next;
+  }
+
+  PendapatanBulanan *newNode = buat_pendapatan_bln(bulan, tahun, pendapatan);
+  newNode->next = *head;
+  *head = newNode;
+}
+
+void tambah_pendapatan_thn(PendapatanTahunan **head, int tahun, int pendapatan)
+{
+  PendapatanTahunan *current = *head;
+  while (current != NULL)
+  {
+    if (current->tahun == tahun)
+    {
+      current->pendapatan += pendapatan;
+      return;
+    }
+    current = current->next;
+  }
+
+  PendapatanTahunan *newNode = buat_pendapatan_thn(tahun, pendapatan);
+  newNode->next = *head;
+  *head = newNode;
+}
+
+double pendapatan_rata2_thn(PendapatanTahunan *head)
+{
+  int total_tahun = 0;
+  int total_pendapatan = 0;
+
+  PendapatanTahunan *current = head;
+  while (current != NULL) {
+    total_pendapatan += current->pendapatan;
+    total_tahun++;
+    current = current->next;
+  }
+  if (total_tahun == 0) return 0;
+  return (double)(total_pendapatan / total_tahun);
 }

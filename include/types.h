@@ -35,15 +35,18 @@ typedef struct riwayat_t
   struct riwayat_t *next;
 } Riwayat;
 
-typedef struct pasien_search_t {
-  Pasien *pasien;
-  struct pasien_search_t *next;
-} PasienSearch;
+typedef struct pendapatan_bln_t {
+  int tahun;
+  int bulan;
+  int pendapatan;
+  struct pendapatan_bln_t *next;
+} PendapatanBulanan;
 
-typedef struct riwayat_search_t {
-  Riwayat *riwayat;
-  struct riwayat_search_t *next;
-} RiwayatSearch;
+typedef struct pendapatan_thn_t {
+  int tahun;
+  int pendapatan;
+  struct pendapatan_thn_t *next;
+} PendapatanTahunan;
 
 Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS);
 Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
@@ -65,3 +68,9 @@ Riwayat *search_riwayat_by_id_and_tanggal(Riwayat *head, int ID, int hariPeriksa
 Riwayat *search_riwayat_by_id(Riwayat *head, int ID);
 void edit_riwayat(Riwayat *head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
 void delete_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa);
+
+PendapatanBulanan *buat_pendapatan_bln(int bulan, int tahun, int pendapatan);
+PendapatanTahunan *buat_pendapatan_thn(int tahun, int pendapatan);
+void tambah_pendapatan_bln(PendapatanBulanan **head, int bulan, int tahun, int pendapatan);
+void tambah_pendapatan_thn(PendapatanTahunan **head, int tahun, int pendapatan);
+double pendapatan_rata2_thn(PendapatanTahunan *head);
