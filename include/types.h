@@ -1,40 +1,20 @@
 #pragma once
 #include <gtk/gtk.h>
 
-typedef enum diagnosis_t
-{
-  Dehidrasi,
-  Keseleo,
-  MasukAngin,
-  Pusing
-} Diagnosis;
-typedef enum tindakan_t
-{
-  Pendaftaran,
-  Pemeriksaan,
-  Vaksinasi,
-  CekGulaDarah,
-  PasangInfus,
-  Pengobatan
-} Tindakan;
+#define STRLEN 25
 
 extern char *MONTHS[12];
-
-typedef struct tanggal_t
-{
-  int hari;
-  int bulan;
-  int tahun;
-} Tanggal;
 
 typedef struct pasien_t
 {
   int ID;
-  char nama[25];
-  char alamat[25];
-  char kota[25];
-  char tempatLahir[25];
-  Tanggal *tanggalLahir;
+  char nama[STRLEN];
+  char alamat[STRLEN];
+  char kota[STRLEN];
+  char tempatLahir[STRLEN];
+  int hariLahir;
+  int bulanLahir;
+  int tahunLahir;
   int umur;
   int BPJS;
   struct pasien_t *next;
@@ -43,10 +23,14 @@ typedef struct pasien_t
 typedef struct riwayat_t
 {
   int ID;
-  Tanggal *tanggal;
-  Diagnosis diagnosis;
-  Tindakan tindakan;
-  Tanggal *kontrol;
+  int hariPeriksa;
+  int bulanPeriksa;
+  int tahunPeriksa;
+  char diagnosis[STRLEN];
+  char tindakan[STRLEN];
+  int hariKontrol;
+  int bulanKontrol;
+  int tahunKontrol;
   int biaya;
   struct riwayat_t *next;
 } Riwayat;
@@ -61,29 +45,23 @@ typedef struct riwayat_search_t {
   struct riwayat_search_t *next;
 } RiwayatSearch;
 
-Tanggal *buat_tanggal(int hari, int bulan, int tahun);
-Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
-Riwayat *buat_riwayat(int ID, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
+Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS);
+Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
 
-void cetak_tanggal(char *str, Tanggal *tanggal);
+void cetak_tanggal(char *str, int hari, int bulan, int tahun);
 void cetak_pasien(Pasien *pasien);
 void cetak_riwayat(Riwayat *riwayat);
 
 void hapus_pasien(Pasien *pasien);
 void hapus_riwayat(Riwayat *riwayat);
 
-Diagnosis str_ke_diagnosis(char *str);
-Tindakan str_ke_tindakan(char *str);
-void diagnosis_ke_str(char *str, Diagnosis diagnosis);
-void tindakan_ke_str(char *str, Tindakan tindakan);
+void add_pasien(Pasien **head, int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS);
+void edit_pasien(Pasien *head, int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS);
+void delete_pasien(Pasien **head, int ID);
+Pasien *search_pasien_by_id(Pasien *head, int ID);
 
-void add_pasien(Pasien **head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
-void edit_pasien(Pasien *head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
-void delete_pasien(Pasien **head, int id);
-Pasien *search_pasien_by_id(Pasien *head, int id);
-
-void add_riwayat(Riwayat **head, int id, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
-Riwayat *search_riwayat_by_id_and_tanggal(Riwayat *head, int id, Tanggal *tanggal);
-Riwayat *search_riwayat_by_id(Riwayat *head, int id);
-void edit_riwayat(Riwayat *head, int id, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
-void delete_riwayat(Riwayat **head, int id, Tanggal *tanggal);
+void add_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
+Riwayat *search_riwayat_by_id_and_tanggal(Riwayat *head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa);
+Riwayat *search_riwayat_by_id(Riwayat *head, int ID);
+void edit_riwayat(Riwayat *head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
+void delete_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa);

@@ -10,15 +10,9 @@ int main(int argc, char **argv)
   int biaya[6];
   baca_biaya("../data/Biaya.csv", biaya);
 
-  // struct main_data_t data = {
-  //   .pasien_ref = &pasien,
-  //   .riwayat_ref = &riwayat
-  // };
-
   // Pasien *search_test = search_pasien_by_id(pasien, 1230123);
   // cetak_pasien(search_test);
   // cetak_riwayat(riwayat);
-  // printf("%d\n", biaya[CekGulaDarah]);
 
   GtkApplication *app;
   int status;

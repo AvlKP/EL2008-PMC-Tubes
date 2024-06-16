@@ -27,7 +27,7 @@ void print_pasien_to_buffer(Pasien *pasien, GtkTextBuffer *buffer)
   curr = pasien;
   while (curr != NULL)
   {
-    cetak_tanggal(tanggalLahir, curr->tanggalLahir);
+    cetak_tanggal(tanggalLahir, curr->hariLahir, curr->bulanLahir, curr->tahunLahir);
     snprintf(line, sizeof(line), "%-3d | KX %7d | %-24s | %-24s | %-20s | %-20s | %-17s | %-4d | %10d\n",
              i, curr->ID, curr->nama, curr->alamat, curr->kota, curr->tempatLahir, tanggalLahir, curr->umur, curr->BPJS);
     gtk_text_buffer_insert(buffer, &iter, line, -1);
@@ -68,11 +68,11 @@ void create_pasien_form(Pasien *old, GtkWidget **win_ref, GtkWidget **btn_submit
     gtk_editable_set_text(GTK_EDITABLE(entry_umur), temp);
     sprintf(temp, "%d", old->BPJS);
     gtk_editable_set_text(GTK_EDITABLE(entry_bpjs), temp);
-    sprintf(temp, "%d", old->tanggalLahir->hari);
+    sprintf(temp, "%d", old->hariLahir);
     gtk_editable_set_text(GTK_EDITABLE(entry_tgll_hari), temp);
-    sprintf(temp, "%d", old->tanggalLahir->bulan);
+    sprintf(temp, "%d", old->bulanLahir);
     gtk_editable_set_text(GTK_EDITABLE(entry_tgll_bulan), temp);
-    sprintf(temp, "%d", old->tanggalLahir->tahun);
+    sprintf(temp, "%d", old->tahunLahir);
     gtk_editable_set_text(GTK_EDITABLE(entry_tgll_tahun), temp);
     sprintf(temp, "%d", old->ID);
     gtk_editable_set_text(GTK_EDITABLE(entry_id), temp);
@@ -125,8 +125,7 @@ void on_add_pasien(GtkButton *button, gpointer user_data)
   int umur = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_umur)));
   int bpjs = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_bpjs)));
 
-  Tanggal *tgl = buat_tanggal(tgll_hari, tgll_bulan, tgll_tahun);
-  add_pasien(pasien_ref, id, nama, alamat, kota, templ, tgl, umur, bpjs);
+  add_pasien(pasien_ref, id, nama, alamat, kota, templ, tgll_hari, tgll_bulan, tgll_tahun, umur, bpjs);
   print_pasien_to_buffer(*(pasien_ref), tb);
 
   g_free(form_data);
@@ -150,10 +149,8 @@ void on_edit_pasien(GtkButton *button, gpointer user_data) {
   int umur = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_umur)));
   int bpjs = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_bpjs)));
 
-  Tanggal *tgl = buat_tanggal(tgll_hari, tgll_bulan, tgll_tahun);
-  edit_pasien(pasien, id, nama, alamat, kota, templ, tgl, umur, bpjs);
+  edit_pasien(pasien, id, nama, alamat, kota, templ, tgll_hari, tgll_bulan, tgll_tahun, umur, bpjs);
   print_pasien_to_buffer(*(pasien_ref), tb);
-
   g_free(form_data);
   gtk_window_close(GTK_WINDOW(user_data));
 }
@@ -230,7 +227,7 @@ void on_search_pasien_id(GtkButton *button, gpointer user_data) {
   gtk_label_set_text(GTK_LABEL(label_umur), temp);
   sprintf(temp, "%d", pasien->BPJS);
   gtk_label_set_text(GTK_LABEL(label_bpjs), temp);
-  cetak_tanggal(temp, pasien->tanggalLahir);
+  cetak_tanggal(temp, pasien->hariLahir, pasien->bulanLahir, pasien->tahunLahir);
   gtk_label_set_text(GTK_LABEL(label_tgll), temp);
   sprintf(temp, "%d", pasien->ID);
   gtk_label_set_text(GTK_LABEL(label_id), temp);

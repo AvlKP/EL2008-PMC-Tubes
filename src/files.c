@@ -9,27 +9,24 @@
 
 char *MONTHS[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
-Tanggal *baca_tanggal(char *sTanggal, int offset)
+void *baca_tanggal(char *sTanggal, int offset, int *hari, int *bulan, int *tahun)
 {
-  int hari, bulan, tahun;
   char sBulan[10], temp[10];
 
-  if (sscanf(sTanggal, "%d %s %d", &hari, sBulan, &tahun) != 3)
+  if (sscanf(sTanggal, "%d %s %d", hari, sBulan, tahun) != 3)
   {
-    sscanf(sTanggal, "%d-%[^-]-%d", &hari, sBulan, &tahun);
-    tahun += offset;
+    sscanf(sTanggal, "%d-%[^-]-%d", hari, sBulan, tahun);
+    *tahun += offset;
   }
 
   for (int i = 0; i < 12; i++)
   {
     if (!strncmp(MONTHS[i], sBulan, 3))
     {
-      bulan = i + 1;
+      *bulan = i + 1;
       break;
     }
   }
-
-  return buat_tanggal(hari, bulan, tahun);
 }
 
 Pasien *baca_data_pasien(char *path)
@@ -51,22 +48,22 @@ Pasien *baca_data_pasien(char *path)
     if (row > 0)
     {
       int ID, umur, BPJS;
-      char nama[25], alamat[25], kota[25], tempatLahir[25], tempTanggal[20];
-      Tanggal *tanggalLahir;
+      char nama[STRLEN], alamat[STRLEN], kota[STRLEN], tempatLahir[STRLEN], tanggalLahir[STRLEN];
 
       sscanf(buf, "%*d, %[^,], %[^,], %[^,], %[^,], %[^,], %d, %d, %*s %d",
-             nama, alamat, kota, tempatLahir, tempTanggal, &umur, &BPJS, &ID);
+             nama, alamat, kota, tempatLahir, tanggalLahir, &umur, &BPJS, &ID);
 
-      tanggalLahir = baca_tanggal(tempTanggal, 1900);
+      int hariLahir, bulanLahir, tahunLahir;
+      baca_tanggal(tanggalLahir, 1900, &hariLahir, &bulanLahir, &tahunLahir);
 
       if (daftarPasien == NULL)
       {
-        daftarPasien = buat_pasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
+        daftarPasien = buat_pasien(ID, nama, alamat, kota, tempatLahir, hariLahir, bulanLahir, tahunLahir, umur, BPJS);
         tempPasien = daftarPasien;
       }
       else
       {
-        tempPasien->next = buat_pasien(ID, nama, alamat, kota, tempatLahir, tanggalLahir, umur, BPJS);
+        tempPasien->next = buat_pasien(ID, nama, alamat, kota, tempatLahir, hariLahir, bulanLahir, tahunLahir, umur, BPJS);
         tempPasien = tempPasien->next;
       }
     }
@@ -96,29 +93,25 @@ Riwayat *baca_riwayat(char *path)
     if (row > 0)
     {
       int ID, biaya;
-      Tanggal *tanggal;
-      Tanggal *kontrol;
-      Diagnosis diagnosis;
-      Tindakan tindakan;
+      int hariPeriksa, bulanPeriksa, tahunPeriksa;
+      int hariKontrol, bulanKontrol, tahunKontrol;
 
-      char tempTanggal[20], tempKontrol[20], tempDiagnosis[20], tempTindakan[20];
+      char tanggalPeriksa[STRLEN], tanggalKontrol[STRLEN], diagnosis[STRLEN], tindakan[STRLEN];
 
       sscanf(buf, "%*d, %[^,], %*s %d, %[^,], %[^,], %[^,], %d",
-             tempTanggal, &ID, tempDiagnosis, tempTindakan, tempKontrol, &biaya);
+             tanggalPeriksa, &ID, diagnosis, tindakan, tanggalKontrol, &biaya);
 
-      tanggal = baca_tanggal(tempTanggal, 2000);
-      kontrol = baca_tanggal(tempKontrol, 2000);
-      diagnosis = str_ke_diagnosis(tempDiagnosis);
-      tindakan = str_ke_tindakan(tempTindakan);
+      baca_tanggal(tanggalPeriksa, 2000, &hariPeriksa, &bulanPeriksa, &tahunPeriksa);
+      baca_tanggal(tanggalKontrol, 2000, &hariKontrol, &bulanKontrol, &tahunKontrol);
 
       if (daftarRiwayat == NULL)
       {
-        daftarRiwayat = buat_riwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
+        daftarRiwayat = buat_riwayat(ID, hariPeriksa, bulanPeriksa, tahunPeriksa, diagnosis, tindakan, hariKontrol, bulanKontrol, tahunKontrol, biaya);
         tempRiwayat = daftarRiwayat;
       }
       else
       {
-        tempRiwayat->next = buat_riwayat(ID, tanggal, diagnosis, tindakan, kontrol, biaya);
+        tempRiwayat->next = buat_riwayat(ID, hariPeriksa, bulanPeriksa, tahunPeriksa, diagnosis, tindakan, hariKontrol, bulanKontrol, tahunKontrol, biaya);
         tempRiwayat = tempRiwayat->next;
       }
     }

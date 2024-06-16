@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="modal">TRUE</property>
+    <child>
+      <child>
+        <object class="GtkScrolledWindow">
+          <property name="hexpand">TRUE</property>
+          <property name="vexpand">TRUE</property>
+          <child>
+            <object class="GtkTextView" id="tv">
+              <property name="editable">FALSE</property>
+              <property name="cursor-visible">TRUE</property>
+              <property name="monospace">TRUE</property>
+            </object>
+          </child>
+        </object>
+      </child>
+    </child>
+  </object>
+</interface>

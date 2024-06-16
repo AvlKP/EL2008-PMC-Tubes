@@ -23,16 +23,14 @@ void print_riwayat_to_buffer(Riwayat *riwayat, GtkTextBuffer *buffer)
   }
 
   int i = 1;
-  char tglPeriksa[20], tglKontrol[20], diagnosis[20], tindakan[20];
+  char tanggalPeriksa[20], tanggalKontrol[20], diagnosis[20], tindakan[20];
   curr = riwayat;
   while (curr != NULL)
   {
-    cetak_tanggal(tglPeriksa, curr->tanggal);
-    cetak_tanggal(tglKontrol, curr->kontrol);
-    diagnosis_ke_str(diagnosis, curr->diagnosis);
-    tindakan_ke_str(tindakan, curr->tindakan);
+    cetak_tanggal(tanggalPeriksa, curr->hariPeriksa, curr->bulanPeriksa, curr->tahunPeriksa);
+    cetak_tanggal(tanggalKontrol, curr->hariKontrol, curr->bulanKontrol, curr->tahunKontrol);
     snprintf(line, sizeof(line), "%-3d | %-17s | KX %-7d | %-11s | %-16s | %-17s | %-8d\n",
-             i, tglPeriksa, curr->ID, diagnosis, tindakan, tglKontrol, curr->biaya);
+             i, tanggalPeriksa, curr->ID, curr->diagnosis, curr->tindakan, tanggalKontrol, curr->biaya);
     gtk_text_buffer_insert(buffer, &iter, line, -1);
     i++;
     curr = curr->next;
@@ -64,23 +62,23 @@ void create_riwayat_form(Riwayat *old, GtkWidget **win_ref, GtkWidget **btn_subm
   if (old != NULL)
   {
     char temp[LINEMAX];
-    sprintf(temp, "%d", old->tanggal->hari);
+    sprintf(temp, "%d", old->hariPeriksa);
     gtk_editable_set_text(GTK_EDITABLE(entry_tglp_hari), temp);
-    sprintf(temp, "%d", old->tanggal->bulan);
+    sprintf(temp, "%d", old->bulanPeriksa);
     gtk_editable_set_text(GTK_EDITABLE(entry_tglp_bulan), temp);
-    sprintf(temp, "%d", old->tanggal->tahun);
+    sprintf(temp, "%d", old->tahunPeriksa);
     gtk_editable_set_text(GTK_EDITABLE(entry_tglp_tahun), temp);
     sprintf(temp, "%d", old->ID);
     gtk_editable_set_text(GTK_EDITABLE(entry_id), temp);
-    diagnosis_ke_str(temp, old->diagnosis);
+    sprintf(temp, old->diagnosis);
     gtk_editable_set_text(GTK_EDITABLE(entry_diagnosis), temp);
-    tindakan_ke_str(temp, old->tindakan);
+    sprintf(temp, old->tindakan);
     gtk_editable_set_text(GTK_EDITABLE(entry_tindakan), temp);
-    sprintf(temp, "%d", old->kontrol->hari);
+    sprintf(temp, "%d", old->hariKontrol);
     gtk_editable_set_text(GTK_EDITABLE(entry_tglk_hari), temp);
-    sprintf(temp, "%d", old->kontrol->bulan);
+    sprintf(temp, "%d", old->bulanKontrol);
     gtk_editable_set_text(GTK_EDITABLE(entry_tglk_bulan), temp);
-    sprintf(temp, "%d", old->kontrol->tahun);
+    sprintf(temp, "%d", old->tahunKontrol);
     gtk_editable_set_text(GTK_EDITABLE(entry_tglk_tahun), temp);
     sprintf(temp, "%d", old->biaya);
     gtk_editable_set_text(GTK_EDITABLE(entry_biaya), temp);
@@ -137,13 +135,10 @@ void on_add_riwayat(GtkButton *button, gpointer user_data)
   int tglk_bulan = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tglk_bulan)));
   int tglk_tahun = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tglk_tahun)));
   int biaya = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_biaya)));
-  Diagnosis diagnosis = str_ke_diagnosis(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_diagnosis)));
-  Tindakan tindakan = str_ke_tindakan(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tindakan)));
+  char *diagnosis = gtk_editable_get_text(GTK_EDITABLE(form_data->entry_diagnosis));
+  char *tindakan = gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tindakan));
 
-  Tanggal *tanggal = buat_tanggal(tglp_hari, tglp_bulan, tglp_tahun);
-  Tanggal *kontrol = buat_tanggal(tglk_hari, tglk_bulan, tglk_tahun);
-
-  add_riwayat(riwayat_ref, id, tanggal, diagnosis, tindakan, kontrol, biaya);
+  add_riwayat(riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun, diagnosis, tindakan, tglk_hari, tglk_bulan, tglk_tahun, biaya);
   print_riwayat_to_buffer(*(riwayat_ref), tb);
 
   g_free(form_data);
@@ -165,13 +160,10 @@ void on_edit_riwayat(GtkButton *button, gpointer user_data)
   int tglk_bulan = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tglk_bulan)));
   int tglk_tahun = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tglk_tahun)));
   int biaya = atoi(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_biaya)));
-  Diagnosis diagnosis = str_ke_diagnosis(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_diagnosis)));
-  Tindakan tindakan = str_ke_tindakan(gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tindakan)));
+  char *diagnosis = gtk_editable_get_text(GTK_EDITABLE(form_data->entry_diagnosis));
+  char *tindakan = gtk_editable_get_text(GTK_EDITABLE(form_data->entry_tindakan));
 
-  Tanggal *tanggal = buat_tanggal(tglp_hari, tglp_bulan, tglp_tahun);
-  Tanggal *kontrol = buat_tanggal(tglk_hari, tglk_bulan, tglk_tahun);
-
-  edit_riwayat(riwayat, id, tanggal, diagnosis, tindakan, kontrol, biaya);
+  edit_riwayat(riwayat, id, tglp_hari, tglp_bulan, tglp_tahun, diagnosis, tindakan, tglk_hari, tglk_bulan, tglk_tahun, biaya);
   print_riwayat_to_buffer(*(riwayat_ref), tb);
 
   g_free(form_data);
@@ -192,19 +184,17 @@ void on_edit_riwayat_entry(GtkButton *button, gpointer user_data)
   int tglp_hari = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_hari)));
   int tglp_bulan = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_bulan)));
   int tglp_tahun = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_tahun)));
-  Tanggal *tanggal = buat_tanggal(tglp_hari, tglp_bulan, tglp_tahun);
 
   gtk_window_close(GTK_WINDOW(user_data));
 
   GtkWidget *win;
   GtkWidget *btn_submit;
-  Riwayat *riwayat = search_riwayat_by_id_and_tanggal(*riwayat_ref, id, tanggal);
-  free(tanggal);
+  Riwayat *riwayat = search_riwayat_by_id_and_tanggal(*riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun);
 
   create_riwayat_form(riwayat, &win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
-  gtk_window_set_title(GTK_WINDOW(win), "Edit Pasien");
+  gtk_window_set_title(GTK_WINDOW(win), "Ubah Riwayat");
   g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_edit_riwayat), (gpointer)win);
 
   g_object_set_data(G_OBJECT(btn_submit), "riwayat_ref", riwayat_ref);
@@ -227,10 +217,8 @@ void on_delete_riwayat(GtkButton *button, gpointer user_data)
   int tglp_hari = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_hari)));
   int tglp_bulan = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_bulan)));
   int tglp_tahun = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_tglp_tahun)));
-  Tanggal *tanggal = buat_tanggal(tglp_hari, tglp_bulan, tglp_tahun);
 
-  delete_riwayat(riwayat_ref, id, tanggal);
-  free(tanggal);
+  delete_riwayat(riwayat_ref, id, tglp_hari, tglp_bulan, tglp_tahun);
   print_riwayat_to_buffer(*(riwayat_ref), tb);
   gtk_window_close(GTK_WINDOW(user_data));
 }
@@ -246,7 +234,7 @@ void open_add_riwayat(GtkButton *button, gpointer user_data)
   create_riwayat_form(NULL, &win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
-  gtk_window_set_title(GTK_WINDOW(win), "Tambah Pasien");
+  gtk_window_set_title(GTK_WINDOW(win), "Tambah Riwayat");
   g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_add_riwayat), (gpointer)win);
 
   g_object_set_data(G_OBJECT(btn_submit), "riwayat_ref", riwayat_ref);
