@@ -143,7 +143,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="btn_submit">
+          <object class="GtkButton" id="btn_info">
             <property name="label">Riwayat</property>
             <layout>
               <property name="column">0</property>

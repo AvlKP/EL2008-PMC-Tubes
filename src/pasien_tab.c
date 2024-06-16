@@ -193,7 +193,7 @@ void on_delete_pasien(GtkButton *button, gpointer user_data)
   gtk_window_close(GTK_WINDOW(user_data));
 }
 
-void on_search_pasien_id(GtkButton *button, gpointer user_data) {
+void on_search_pasien_entry(GtkButton *button, gpointer user_data) {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   GtkWidget *entry_pid = g_object_get_data(G_OBJECT(button), "entry_pid");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
@@ -310,7 +310,7 @@ void open_search_pasien(GtkButton *button, gpointer user_data)
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
   gtk_window_set_title(GTK_WINDOW(win), "Cari Pasien");
-  g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_search_pasien_id), (gpointer)win);
+  g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_search_pasien_entry), (gpointer)win);
 
   g_object_set_data(G_OBJECT(btn_submit), "pasien_ref", pasien_ref);
 

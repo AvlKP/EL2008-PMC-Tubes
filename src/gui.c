@@ -66,7 +66,7 @@ void activate(GtkApplication *app, gpointer user_data)
   g_signal_connect(btn_riwayat[0], "clicked", G_CALLBACK(open_add_riwayat), NULL);
   g_signal_connect(btn_riwayat[1], "clicked", G_CALLBACK(open_edit_riwayat), NULL);
   g_signal_connect(btn_riwayat[2], "clicked", G_CALLBACK(open_delete_riwayat), NULL);
-  // g_signal_connect(btn_riwayat[3], "clicked", G_CALLBACK(open_search_riwayat), NULL);
+  g_signal_connect(btn_riwayat[3], "clicked", G_CALLBACK(open_search_riwayat), NULL);
 
   g_object_unref(builder);
   gtk_window_present(GTK_WINDOW(win));

@@ -7,5 +7,6 @@
     <file>pasien_search.ui</file>
     <file>riwayat_form.ui</file>
     <file>riwayat_entry.ui</file>
+    <file>riwayat_search.ui</file>
   </gresource>
 </gresources>
