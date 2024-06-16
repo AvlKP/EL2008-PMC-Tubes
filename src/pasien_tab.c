@@ -36,7 +36,7 @@ void print_pasien_to_buffer(Pasien *pasien, GtkTextBuffer *buffer)
   }
 }
 
-void create_form_win(Pasien *old, GtkWidget **win_ref, GtkWidget **btn_submit_ref)
+void create_pasien_form(Pasien *old, GtkWidget **win_ref, GtkWidget **btn_submit_ref)
 {
   GtkWidget *entry_id, *entry_nama, *entry_alamat, *entry_kota, *entry_templ, *entry_umur, *entry_bpjs;
   GtkWidget *entry_tgll_hari, *entry_tgll_bulan, *entry_tgll_tahun;
@@ -93,13 +93,13 @@ void create_form_win(Pasien *old, GtkWidget **win_ref, GtkWidget **btn_submit_re
   g_object_set_data(G_OBJECT(*(btn_submit_ref)), "form_data", form_data);
 }
 
-void create_id_win(GtkWidget **win_ref, GtkWidget **btn_submit_ref)
+void create_pasien_entry(GtkWidget **win_ref, GtkWidget **btn_submit_ref)
 {
   GtkWidget *entry_id;
   GtkWidget *btn_submit;
   GtkBuilder *builder;
 
-  builder = gtk_builder_new_from_resource("/com/github/AvlKP/KlinikX/pasien_id.ui");
+  builder = gtk_builder_new_from_resource("/com/github/AvlKP/KlinikX/pasien_entry.ui");
   *win_ref = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
   entry_id = GTK_WIDGET(gtk_builder_get_object(builder, "entry_id"));
   *btn_submit_ref = GTK_WIDGET(gtk_builder_get_object(builder, "btn_submit"));
@@ -158,7 +158,7 @@ void on_edit_pasien(GtkButton *button, gpointer user_data) {
   gtk_window_close(GTK_WINDOW(user_data));
 }
 
-void on_edit_pasien_id(GtkButton *button, gpointer user_data) {
+void on_edit_pasien_entry(GtkButton *button, gpointer user_data) {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   GtkWidget *entry_pid = g_object_get_data(G_OBJECT(button), "entry_pid");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
@@ -171,7 +171,7 @@ void on_edit_pasien_id(GtkButton *button, gpointer user_data) {
   GtkWidget *btn_submit;
   Pasien *pasien = search_pasien_by_id(*pasien_ref, id);
 
-  create_form_win(pasien, &win, &btn_submit);
+  create_pasien_form(pasien, &win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
   gtk_window_set_title(GTK_WINDOW(win), "Edit Pasien");
@@ -209,7 +209,7 @@ void on_search_pasien_id(GtkButton *button, gpointer user_data) {
   GtkWidget *label_id, *label_nama, *label_alamat, *label_kota, *label_templ, *label_tgll, *label_umur, *label_bpjs;
   GtkBuilder *builder;
 
-  builder = gtk_builder_new_from_resource("/com/github/AvlKP/KlinikX/pasien_info.ui");
+  builder = gtk_builder_new_from_resource("/com/github/AvlKP/KlinikX/pasien_search.ui");
   win = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
   label_id = GTK_WIDGET(gtk_builder_get_object(builder, "label_id"));
   label_nama = GTK_WIDGET(gtk_builder_get_object(builder, "label_nama"));
@@ -241,7 +241,7 @@ void on_search_pasien_id(GtkButton *button, gpointer user_data) {
   gtk_window_present(GTK_WINDOW(win));
 }
 
-void show_add_win(GtkButton *button, gpointer user_data)
+void open_add_pasien(GtkButton *button, gpointer user_data)
 {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
@@ -249,7 +249,7 @@ void show_add_win(GtkButton *button, gpointer user_data)
   GtkWidget *win;
   GtkWidget *btn_submit;
 
-  create_form_win(NULL, &win, &btn_submit);
+  create_pasien_form(NULL, &win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
   gtk_window_set_title(GTK_WINDOW(win), "Tambah Pasien");
@@ -261,7 +261,7 @@ void show_add_win(GtkButton *button, gpointer user_data)
   gtk_window_present(GTK_WINDOW(win));
 }
 
-void show_edit_win(GtkButton *button, gpointer user_data)
+void open_edit_pasien(GtkButton *button, gpointer user_data)
 {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
@@ -269,11 +269,11 @@ void show_edit_win(GtkButton *button, gpointer user_data)
 
   GtkWidget *win;
   GtkWidget *btn_submit;
-  create_id_win(&win, &btn_submit);
+  create_pasien_entry(&win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
-  gtk_window_set_title(GTK_WINDOW(win), "Edit Pasien");
-  g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_edit_pasien_id), (gpointer)win);
+  gtk_window_set_title(GTK_WINDOW(win), "Ubah Pasien");
+  g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_edit_pasien_entry), (gpointer)win);
 
   g_object_set_data(G_OBJECT(btn_submit), "main_window", main_win);
   g_object_set_data(G_OBJECT(btn_submit), "pasien_ref", pasien_ref);
@@ -282,7 +282,7 @@ void show_edit_win(GtkButton *button, gpointer user_data)
   gtk_window_present(GTK_WINDOW(win));
 }
 
-void show_delete_win(GtkButton *button, gpointer user_data)
+void open_delete_pasien(GtkButton *button, gpointer user_data)
 {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
@@ -290,7 +290,7 @@ void show_delete_win(GtkButton *button, gpointer user_data)
 
   GtkWidget *win;
   GtkWidget *btn_submit;
-  create_id_win(&win, &btn_submit);
+  create_pasien_entry(&win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
   gtk_window_set_title(GTK_WINDOW(win), "Hapus Pasien");
@@ -302,14 +302,14 @@ void show_delete_win(GtkButton *button, gpointer user_data)
   gtk_window_present(GTK_WINDOW(win));
 }
 
-void show_search_win(GtkButton *button, gpointer user_data)
+void open_search_pasien(GtkButton *button, gpointer user_data)
 {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
 
   GtkWidget *win;
   GtkWidget *btn_submit;
-  create_id_win(&win, &btn_submit);
+  create_pasien_entry(&win, &btn_submit);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
   gtk_window_set_title(GTK_WINDOW(win), "Cari Pasien");

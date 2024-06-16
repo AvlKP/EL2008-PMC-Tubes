@@ -214,6 +214,7 @@ void add_pasien(Pasien **head, int id, char *nama, char *alamat, char *kota, cha
 
 void edit_pasien(Pasien *head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS)
 {
+  free(head->tanggalLahir);
   strncpy(head->nama, nama, sizeof(head->nama) - 1);
   strncpy(head->alamat, alamat, sizeof(head->alamat) - 1);
   strncpy(head->kota, kota, sizeof(head->kota) - 1);
@@ -227,24 +228,24 @@ void edit_pasien(Pasien *head, int id, char *nama, char *alamat, char *kota, cha
 void delete_pasien(Pasien **head, int id)
 {
   Pasien *current = *head;
-  Pasien *prev = NULL;
+  Pasien *previous = NULL;
 
   while (current != NULL && current->ID != id)
   {
-    prev = current;
+    previous = current;
     current = current->next;
   }
 
   if (current == NULL)
     return;
 
-  if (prev == NULL)
+  if (previous == NULL)
   {
     *head = current->next;
   }
   else
   {
-    prev->next = current->next;
+    previous->next = current->next;
   }
 
   free(current->tanggalLahir);
@@ -263,4 +264,100 @@ Pasien *search_pasien_by_id(Pasien *head, int id)
     current = current->next;
   }
   return NULL;
+}
+
+void add_riwayat(Riwayat **head, int id, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya)
+{
+  Riwayat *new_riwayat = buat_riwayat(id, tanggal, diagnosis, tindakan, kontrol, biaya);
+  new_riwayat->next = *head;
+  *head = new_riwayat;
+}
+
+Riwayat *search_riwayat_by_id_and_tanggal(Riwayat *head, int id, Tanggal *tanggal)
+{
+  Riwayat *current = head;
+  while (current != NULL)
+  {
+    if (current->ID == id &&
+        current->tanggal->hari == tanggal->hari &&
+        current->tanggal->bulan == tanggal->bulan &&
+        current->tanggal->tahun == tanggal->tahun)
+    {
+      return current;
+    }
+    current = current->next;
+  }
+  return NULL;
+}
+
+Riwayat *search_riwayat_by_id(Riwayat *head, int id)
+{
+  Riwayat *result_head = NULL;
+  Riwayat *result_tail = NULL;
+  Riwayat *current = head;
+
+  while (current != NULL)
+  {
+    if (current->ID == id)
+    {
+      Riwayat *new_result = malloc(sizeof(Riwayat));
+      *new_result = *current;
+      new_result->next = NULL;
+
+      if (result_head == NULL)
+      {
+        result_head = new_result;
+        result_tail = new_result;
+      }
+      else
+      {
+        result_tail->next = new_result;
+        result_tail = new_result;
+      }
+    }
+    current = current->next;
+  }
+  return result_head;
+}
+
+void edit_riwayat(Riwayat *head, int id, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya)
+{
+  free(head->tanggal);
+  free(head->kontrol);
+  head->ID = id;
+  head->tanggal = tanggal;
+  head->diagnosis = diagnosis;
+  head->tindakan = tindakan;
+  head->kontrol = kontrol;
+  head->biaya = biaya;
+}
+
+void delete_riwayat(Riwayat **head, int id, Tanggal *tanggal)
+{
+  Riwayat *current = *head;
+  Riwayat *previous = NULL;
+
+  while (current != NULL)
+  {
+    if (current->ID == id &&
+        current->tanggal->hari == tanggal->hari &&
+        current->tanggal->bulan == tanggal->bulan &&
+        current->tanggal->tahun == tanggal->tahun)
+    {
+      if (previous == NULL)
+      {
+        *head = current->next;
+      }
+      else
+      {
+        previous->next = current->next;
+      }
+      free(current->tanggal);
+      free(current->kontrol);
+      free(current);
+      return;
+    }
+    previous = current;
+    current = current->next;
+  }
 }

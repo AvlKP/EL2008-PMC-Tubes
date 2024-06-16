@@ -16,7 +16,7 @@ typedef struct {
 } PasienForm;
 
 void print_pasien_to_buffer(Pasien *pasien, GtkTextBuffer *buffer);
-void show_add_win(GtkButton *button, gpointer user_data);
-void show_edit_win(GtkButton *button, gpointer user_data);
-void show_delete_win(GtkButton *button, gpointer user_data);
-void show_search_win(GtkButton *button, gpointer user_data);
+void open_add_pasien(GtkButton *button, gpointer user_data);
+void open_edit_pasien(GtkButton *button, gpointer user_data);
+void open_delete_pasien(GtkButton *button, gpointer user_data);
+void open_search_pasien(GtkButton *button, gpointer user_data);

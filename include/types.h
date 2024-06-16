@@ -74,8 +74,16 @@ void hapus_riwayat(Riwayat *riwayat);
 
 Diagnosis str_ke_diagnosis(char *str);
 Tindakan str_ke_tindakan(char *str);
+void diagnosis_ke_str(char *str, Diagnosis diagnosis);
+void tindakan_ke_str(char *str, Tindakan tindakan);
 
 void add_pasien(Pasien **head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
 void edit_pasien(Pasien *head, int id, char *nama, char *alamat, char *kota, char *tempatLahir, Tanggal *tanggalLahir, int umur, int BPJS);
 void delete_pasien(Pasien **head, int id);
 Pasien *search_pasien_by_id(Pasien *head, int id);
+
+void add_riwayat(Riwayat **head, int id, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
+Riwayat *search_riwayat_by_id_and_tanggal(Riwayat *head, int id, Tanggal *tanggal);
+Riwayat *search_riwayat_by_id(Riwayat *head, int id);
+void edit_riwayat(Riwayat *head, int id, Tanggal *tanggal, Diagnosis diagnosis, Tindakan tindakan, Tanggal *kontrol, int biaya);
+void delete_riwayat(Riwayat **head, int id, Tanggal *tanggal);
