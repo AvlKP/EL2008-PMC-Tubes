@@ -2,6 +2,7 @@
 #include <gtk/gtk.h>
 
 #define STRLEN 25
+#define LINEMAX 256
 
 extern char *MONTHS[12];
 

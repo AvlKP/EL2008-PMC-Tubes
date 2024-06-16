@@ -7,6 +7,7 @@ set(SOURCES
   gui.c
   pasien_tab.c
   riwayat_tab.c
+  pendapatan_tab.c
 )
 
 set(HEADERS
@@ -15,6 +16,7 @@ set(HEADERS
   gui.h
   pasien_tab.h
   riwayat_tab.h
+  pendapatan_tab.h
 )
 
 project(

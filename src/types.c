@@ -41,7 +41,11 @@ Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriks
 
 void cetak_tanggal(char *str, int hari, int bulan, int tahun)
 {
-  sprintf(str, "%d %s %d", hari, MONTHS[bulan - 1], tahun);
+  if (hari == 0) {
+    sprintf(str, "%s %d", MONTHS[bulan - 1], tahun);
+  } else {
+    sprintf(str, "%d %s %d", hari, MONTHS[bulan - 1], tahun);
+  }
 }
 
 void cetak_pasien(Pasien *pasien)

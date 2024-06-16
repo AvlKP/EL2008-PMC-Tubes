@@ -3,6 +3,31 @@
 #include "types.h"
 #include "pasien_tab.h"
 #include "riwayat_tab.h"
+#include "pendapatan_tab.h"
+
+void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer user_data) {
+  if (page_num != 2) return;
+  GtkTextBuffer *tb_pend_bln = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_pend_bln"));
+  GtkTextBuffer *tb_pend_thn = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_pend_thn"));
+  GtkWidget *label_pend_avg = g_object_get_data(G_OBJECT(nb), "label_pend_avg");
+  Riwayat **riwayat_ref = g_object_get_data(G_OBJECT(nb), "riwayat_ref");
+
+  PendapatanBulanan *pend_bln = NULL;
+  PendapatanTahunan *pend_thn = NULL;
+
+  Riwayat *curr = *riwayat_ref;
+  while (curr != NULL) {
+    tambah_pendapatan_bln(&pend_bln, curr->bulanPeriksa, curr->tahunPeriksa, curr->biaya);
+    tambah_pendapatan_thn(&pend_thn, curr->tahunPeriksa, curr->biaya);
+    curr = curr->next;
+  }
+
+  char temp[STRLEN];
+  snprintf(temp, sizeof(temp), "%.2f", pendapatan_rata2_thn(pend_thn));
+  print_pendapatan_bln_to_buffer(pend_bln, tb_pend_bln);
+  print_pendapatan_thn_to_buffer(pend_thn, tb_pend_thn);
+  gtk_label_set_text(GTK_LABEL(label_pend_avg), temp);
+}
 
 void activate(GtkApplication *app, gpointer user_data)
 {
@@ -68,6 +93,24 @@ void activate(GtkApplication *app, gpointer user_data)
   g_signal_connect(btn_riwayat[1], "clicked", G_CALLBACK(open_edit_riwayat), NULL);
   g_signal_connect(btn_riwayat[2], "clicked", G_CALLBACK(open_delete_riwayat), NULL);
   g_signal_connect(btn_riwayat[3], "clicked", G_CALLBACK(open_search_riwayat), NULL);
+
+  // Pendapatan Tab
+  
+  GtkWidget *label_pend_avg;
+  GtkWidget *tv_pend_bln, *tv_pend_thn;
+  GtkTextBuffer *tb_pend_bln, *tb_pend_thn;
+
+  label_pend_avg = GTK_WIDGET(gtk_builder_get_object(builder, "label_pend_avg"));
+  tv_pend_bln = GTK_WIDGET(gtk_builder_get_object(builder, "tv_pend_bln"));
+  tb_pend_bln = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv_pend_bln));
+  tv_pend_thn = GTK_WIDGET(gtk_builder_get_object(builder, "tv_pend_thn"));
+  tb_pend_thn = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv_pend_thn));
+
+  g_object_set_data(G_OBJECT(nb), "riwayat_ref", riwayat_ref);  
+  g_object_set_data(G_OBJECT(nb), "tb_pend_bln", tb_pend_bln);  
+  g_object_set_data(G_OBJECT(nb), "tb_pend_thn", tb_pend_thn);  
+  g_object_set_data(G_OBJECT(nb), "label_pend_avg", label_pend_avg);  
+  g_signal_connect(nb, "switch-page", G_CALLBACK(on_page_change), NULL);
 
   g_object_unref(builder);
   gtk_window_present(GTK_WINDOW(win));

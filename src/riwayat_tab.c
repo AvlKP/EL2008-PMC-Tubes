@@ -1,7 +1,5 @@
 #include "riwayat_tab.h"
 
-#define LINEMAX 256
-
 void print_riwayat_to_buffer(Riwayat *riwayat, GtkTextBuffer *buffer)
 {
   gtk_text_buffer_set_text(buffer, "", -1);
@@ -23,7 +21,7 @@ void print_riwayat_to_buffer(Riwayat *riwayat, GtkTextBuffer *buffer)
   }
 
   int i = 1;
-  char tanggalPeriksa[20], tanggalKontrol[20], diagnosis[20], tindakan[20];
+  char tanggalPeriksa[STRLEN], tanggalKontrol[STRLEN], diagnosis[STRLEN], tindakan[STRLEN];
   curr = riwayat;
   while (curr != NULL)
   {
