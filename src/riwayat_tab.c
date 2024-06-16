@@ -266,7 +266,6 @@ void on_search_riwayat_entry(GtkButton *button, gpointer user_data) {
   gtk_label_set_text(GTK_LABEL(label_biaya), temp);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
-  gtk_window_set_title(GTK_WINDOW(win), "Informasi Riwayat Pemeriksaan");
   
   gtk_window_present(GTK_WINDOW(win));
 }

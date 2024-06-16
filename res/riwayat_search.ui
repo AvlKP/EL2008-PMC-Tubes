@@ -2,6 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="modal">TRUE</property>
+    <property name="title">Informasi Riwayat Pemeriksaan</property>
     <child>
       <object class="GtkGrid">
         <property name="row-spacing">5</property>

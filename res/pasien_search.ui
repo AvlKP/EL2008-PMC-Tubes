@@ -2,6 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="modal">TRUE</property>
+    <property name="name">Informasi Pasien</property>
     <child>
       <object class="GtkGrid">
         <property name="row-spacing">5</property>
@@ -149,6 +150,24 @@
               <property name="column">0</property>
               <property name="row">8</property>
             </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="win_riwayat">
+    <property name="default-width">400</property>
+    <property name="default-height">300</property>
+    <property name="title">Riwayat Pasien</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="hexpand">TRUE</property>
+        <property name="vexpand">TRUE</property>
+        <child>
+          <object class="GtkTextView" id="tv_riwayat">
+            <property name="editable">FALSE</property>
+            <property name="cursor-visible">TRUE</property>
+            <property name="monospace">TRUE</property>
           </object>
         </child>
       </object>

@@ -37,6 +37,7 @@ void activate(GtkApplication *app, gpointer user_data)
     g_object_set_data(G_OBJECT(btn_pasien[i]), "buffer", tb_pasien);
     g_object_set_data(G_OBJECT(btn_pasien[i]), "main_window", win);
   }
+  g_object_set_data(G_OBJECT(btn_pasien[3]), "riwayat_ref", riwayat_ref);
   
   g_signal_connect(btn_pasien[0], "clicked", G_CALLBACK(open_add_pasien), NULL);
   g_signal_connect(btn_pasien[1], "clicked", G_CALLBACK(open_edit_pasien), NULL);

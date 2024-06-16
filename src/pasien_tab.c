@@ -1,4 +1,5 @@
 #include "pasien_tab.h"
+#include "riwayat_tab.h"
 
 #define LINEMAX 256
 
@@ -33,6 +34,13 @@ void print_pasien_to_buffer(Pasien *pasien, GtkTextBuffer *buffer)
     gtk_text_buffer_insert(buffer, &iter, line, -1);
     i++;
     curr = curr->next;
+  }
+}
+
+void on_parent_win_destroy(GtkWindow *parent, gpointer user_data) {
+  GtkWidget *child = GTK_WIDGET(user_data);
+  if (GTK_IS_WINDOW(child)) {
+    gtk_window_destroy(GTK_WINDOW(child));
   }
 }
 
@@ -193,10 +201,36 @@ void on_delete_pasien(GtkButton *button, gpointer user_data)
   gtk_window_close(GTK_WINDOW(user_data));
 }
 
+void on_search_pasien_riwayat(GtkButton *button, gpointer user_data) {
+  Riwayat **riwayat_ref = g_object_get_data(G_OBJECT(button), "riwayat_ref");
+  Pasien *pasien = g_object_get_data(G_OBJECT(button), "pasien");
+  
+  GtkWidget *win;
+  GtkWidget *tv;
+  GtkTextBuffer *tb;
+  GtkBuilder *builder;
+  
+  builder = gtk_builder_new_from_resource("/com/github/AvlKP/KlinikX/pasien_search.ui");
+  win = GTK_WIDGET(gtk_builder_get_object(builder, "win_riwayat"));
+  tv = GTK_WIDGET(gtk_builder_get_object(builder, "tv_riwayat"));
+  g_object_unref(builder);
+
+  tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv));
+
+  Riwayat *riwayat = search_riwayat_by_id(*riwayat_ref, pasien->ID);
+  print_riwayat_to_buffer(riwayat, tb);
+
+  gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(user_data));
+  g_signal_connect(GTK_WINDOW(user_data), "destroy", G_CALLBACK(on_parent_win_destroy), win);
+  
+  gtk_window_present(GTK_WINDOW(win));
+}
+
 void on_search_pasien_entry(GtkButton *button, gpointer user_data) {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   GtkWidget *entry_pid = g_object_get_data(G_OBJECT(button), "entry_pid");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
+  Riwayat **riwayat_ref = g_object_get_data(G_OBJECT(button), "riwayat_ref");
   int id = atoi(gtk_editable_get_text(GTK_EDITABLE(entry_pid)));
 
   gtk_window_close(GTK_WINDOW(user_data));
@@ -204,6 +238,7 @@ void on_search_pasien_entry(GtkButton *button, gpointer user_data) {
   Pasien *pasien = search_pasien_by_id(*pasien_ref, id);
   GtkWidget *win;
   GtkWidget *label_id, *label_nama, *label_alamat, *label_kota, *label_templ, *label_tgll, *label_umur, *label_bpjs;
+  GtkWidget *btn_info;
   GtkBuilder *builder;
 
   builder = gtk_builder_new_from_resource("/com/github/AvlKP/KlinikX/pasien_search.ui");
@@ -216,6 +251,7 @@ void on_search_pasien_entry(GtkButton *button, gpointer user_data) {
   label_tgll = GTK_WIDGET(gtk_builder_get_object(builder, "label_tgll"));
   label_umur = GTK_WIDGET(gtk_builder_get_object(builder, "label_umur"));
   label_bpjs = GTK_WIDGET(gtk_builder_get_object(builder, "label_bpjs"));
+  btn_info = GTK_WIDGET(gtk_builder_get_object(builder, "btn_info"));
   g_object_unref(builder);
 
   char temp[LINEMAX];
@@ -233,8 +269,10 @@ void on_search_pasien_entry(GtkButton *button, gpointer user_data) {
   gtk_label_set_text(GTK_LABEL(label_id), temp);
 
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(main_win));
-  gtk_window_set_title(GTK_WINDOW(win), "Informasi Pasien");
+  g_signal_connect(btn_info, "clicked", G_CALLBACK(on_search_pasien_riwayat), (gpointer)win);
   
+  g_object_set_data(G_OBJECT(btn_info), "pasien", pasien);
+  g_object_set_data(G_OBJECT(btn_info), "riwayat_ref", riwayat_ref);
   gtk_window_present(GTK_WINDOW(win));
 }
 
@@ -303,6 +341,7 @@ void open_search_pasien(GtkButton *button, gpointer user_data)
 {
   GtkWidget *main_win = g_object_get_data(G_OBJECT(button), "main_window");
   Pasien **pasien_ref = g_object_get_data(G_OBJECT(button), "pasien_ref");
+  Riwayat **riwayat_ref = g_object_get_data(G_OBJECT(button), "riwayat_ref");
 
   GtkWidget *win;
   GtkWidget *btn_submit;
@@ -313,6 +352,7 @@ void open_search_pasien(GtkButton *button, gpointer user_data)
   g_signal_connect(btn_submit, "clicked", G_CALLBACK(on_search_pasien_entry), (gpointer)win);
 
   g_object_set_data(G_OBJECT(btn_submit), "pasien_ref", pasien_ref);
+  g_object_set_data(G_OBJECT(btn_submit), "riwayat_ref", riwayat_ref);
 
   gtk_window_present(GTK_WINDOW(win));
 }
