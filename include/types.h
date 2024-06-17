@@ -41,13 +41,7 @@ typedef struct pendapatan_bln_t {
   int bulan;
   int pendapatan;
   struct pendapatan_bln_t *next;
-} PendapatanBulanan;
-
-typedef struct pendapatan_thn_t {
-  int tahun;
-  int pendapatan;
-  struct pendapatan_thn_t *next;
-} PendapatanTahunan;
+} Pendapatan;
 
 typedef struct stat_penyakit_t {
   char nama[STRLEN];
@@ -62,15 +56,7 @@ typedef struct stat_bulanan_t
   int jumlah_pasien;
   StatPenyakit *stat_penyakit;
   struct stat_bulanan_t *next;
-} StatBulanan;
-
-typedef struct stat_tahunan_t
-{
-  int tahun;
-  int jumlah_pasien;
-  StatPenyakit *stat_penyakit;
-  struct stat_tahunan_t *next;
-} StatTahunan;
+} Stat;
 
 Pasien *buat_pasien(int ID, char *nama, char *alamat, char *kota, char *tempatLahir, int hariLahir, int bulanLahir, int tahunLahir, int umur, int BPJS);
 Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
@@ -93,18 +79,16 @@ Riwayat *search_riwayat_by_id(Riwayat *head, int ID);
 void edit_riwayat(Riwayat *head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa, char *diagnosis, char *tindakan, int hariKontrol, int bulanKontrol, int tahunKontrol, int biaya);
 void delete_riwayat(Riwayat **head, int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriksa);
 
-double pendapatan_rata2_thn(PendapatanTahunan *head);
-void generate_pendapatan(PendapatanBulanan **pend_bln, PendapatanTahunan **pend_thn, Riwayat *riwayat);
+double pendapatan_rata2_thn(Pendapatan *head);
+void generate_pendapatan(Pendapatan **pend_bln, Pendapatan **pend_thn, Riwayat *riwayat);
 
 void cetak_stat_penyakit(char *str, StatPenyakit *stat);
-void generate_stat(StatBulanan **stat_bln, StatTahunan **stat_thn, Riwayat *riwayat);
+void generate_stat(Stat **stat_bln, Stat **stat_thn, Riwayat *riwayat);
 void sort_stat_penyakit(StatPenyakit **head);
 
 Riwayat *cari_kontrol_akhir(Riwayat *head, int ID);
 
 void sort_pasien_id(Pasien **head);
 void sort_riwayat_tanggal(Riwayat **head);
-void sort_pendapatan_bln(PendapatanBulanan **head);
-void sort_pendapatan_thn(PendapatanTahunan **head);
-void sort_stat_bln(StatBulanan **head);
-void sort_stat_thn(StatTahunan **head);
+void sort_pendapatan(Pendapatan **head);
+void sort_stat(Stat **head);

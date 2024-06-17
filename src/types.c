@@ -43,7 +43,11 @@ Riwayat *buat_riwayat(int ID, int hariPeriksa, int bulanPeriksa, int tahunPeriks
 
 void cetak_tanggal(char *str, int hari, int bulan, int tahun)
 {
-  if (hari == 0)
+  if (bulan == 0)
+  {
+    sprintf(str, "%d", tahun);
+  }
+  else if (hari == 0)
   {
     sprintf(str, "%s %d", MONTHS[bulan - 1], tahun);
   }
@@ -274,12 +278,12 @@ Riwayat *search_riwayat_by_id(Riwayat *head, int ID)
 
 // NO 4
 
-void tambah_pendapatan_bln(PendapatanBulanan **head, Riwayat *riwayat)
+void tambah_pendapatan(Pendapatan **head, Riwayat *riwayat, int tahunan)
 {
-  PendapatanBulanan *current = *head;
+  Pendapatan *current = *head;
   while (current != NULL)
   {
-    if (current->tahun == riwayat->tahunPeriksa && current->bulan == riwayat->bulanPeriksa)
+    if (current->tahun == riwayat->tahunPeriksa && (tahunan == 1 || current->bulan == riwayat->bulanPeriksa))
     {
       current->pendapatan += riwayat->biaya;
       return;
@@ -287,40 +291,23 @@ void tambah_pendapatan_bln(PendapatanBulanan **head, Riwayat *riwayat)
     current = current->next;
   }
 
-  PendapatanBulanan *newNode = malloc(sizeof(PendapatanBulanan));
-  newNode->bulan = riwayat->bulanPeriksa;
+  Pendapatan *newNode = malloc(sizeof(Pendapatan));
+  if (tahunan == 1)
+    newNode->bulan = 0;
+  else
+    newNode->bulan = riwayat->bulanPeriksa;
   newNode->tahun = riwayat->tahunPeriksa;
   newNode->pendapatan = riwayat->biaya;
   newNode->next = *head;
   *head = newNode;
 }
 
-void tambah_pendapatan_thn(PendapatanTahunan **head, Riwayat *riwayat)
-{
-  PendapatanTahunan *current = *head;
-  while (current != NULL)
-  {
-    if (current->tahun == riwayat->tahunPeriksa)
-    {
-      current->pendapatan += riwayat->biaya;
-      return;
-    }
-    current = current->next;
-  }
-
-  PendapatanTahunan *newNode = malloc(sizeof(PendapatanTahunan));
-  newNode->tahun = riwayat->tahunPeriksa;
-  newNode->pendapatan = riwayat->biaya;
-  newNode->next = *head;
-  *head = newNode;
-}
-
-double pendapatan_rata2_thn(PendapatanTahunan *head)
+double pendapatan_rata2_thn(Pendapatan *head)
 {
   int total_tahun = 0;
   int total_pendapatan = 0;
 
-  PendapatanTahunan *current = head;
+  Pendapatan *current = head;
   while (current != NULL)
   {
     total_pendapatan += current->pendapatan;
@@ -332,13 +319,13 @@ double pendapatan_rata2_thn(PendapatanTahunan *head)
   return (double)(total_pendapatan / total_tahun);
 }
 
-void generate_pendapatan(PendapatanBulanan **pend_bln, PendapatanTahunan **pend_thn, Riwayat *riwayat)
+void generate_pendapatan(Pendapatan **pend_bln, Pendapatan **pend_thn, Riwayat *riwayat)
 {
   Riwayat *current = riwayat;
   while (current != NULL)
   {
-    tambah_pendapatan_bln(pend_bln, current);
-    tambah_pendapatan_thn(pend_thn, current);
+    tambah_pendapatan(pend_bln, current, 0);
+    tambah_pendapatan(pend_thn, current, 1);
     current = current->next;
   }
 }
@@ -408,13 +395,12 @@ void tambah_stat_penyakit(StatPenyakit **head, char *diagnosis)
   *head = newNode;
 }
 
-void tambah_stat_bulanan(StatBulanan **head, Riwayat *riwayat)
+void tambah_stat(Stat **head, Riwayat *riwayat, int tahunan)
 {
-  StatBulanan *current = *head;
-
+  Stat *current = *head;
   while (current != NULL)
   {
-    if (current->bulan == riwayat->bulanPeriksa && current->tahun == riwayat->tahunPeriksa)
+    if (current->tahun == riwayat->tahunPeriksa && (tahunan == 1 || current->bulan == riwayat->bulanPeriksa))
     {
       current->jumlah_pasien++;
       tambah_stat_penyakit(&(current->stat_penyakit), riwayat->diagnosis);
@@ -423,8 +409,11 @@ void tambah_stat_bulanan(StatBulanan **head, Riwayat *riwayat)
     current = current->next;
   }
 
-  StatBulanan *newNode = malloc(sizeof(StatBulanan));
-  newNode->bulan = riwayat->bulanPeriksa;
+  Stat *newNode = malloc(sizeof(Stat));
+  if (tahunan == 1)
+    newNode->bulan = 0;
+  else
+    newNode->bulan = riwayat->bulanPeriksa;
   newNode->tahun = riwayat->tahunPeriksa;
   newNode->jumlah_pasien = 1;
   newNode->stat_penyakit = NULL;
@@ -433,37 +422,13 @@ void tambah_stat_bulanan(StatBulanan **head, Riwayat *riwayat)
   *head = newNode;
 }
 
-void tambah_stat_tahunan(StatTahunan **head, Riwayat *riwayat)
-{
-  StatTahunan *current = *head;
-
-  while (current != NULL)
-  {
-    if (current->tahun == riwayat->tahunPeriksa)
-    {
-      current->jumlah_pasien++;
-      tambah_stat_penyakit(&(current->stat_penyakit), riwayat->diagnosis);
-      return;
-    }
-    current = current->next;
-  }
-
-  StatTahunan *newNode = malloc(sizeof(StatTahunan));
-  newNode->tahun = riwayat->tahunPeriksa;
-  newNode->jumlah_pasien = 1;
-  newNode->stat_penyakit = NULL;
-  tambah_stat_penyakit(&(newNode->stat_penyakit), riwayat->diagnosis);
-  newNode->next = *head;
-  *head = newNode;
-}
-
-void generate_stat(StatBulanan **stat_bln, StatTahunan **stat_thn, Riwayat *riwayat)
+void generate_stat(Stat **stat_bln, Stat **stat_thn, Riwayat *riwayat)
 {
   Riwayat *current = riwayat;
   while (current != NULL)
   {
-    tambah_stat_bulanan(stat_bln, current);
-    tambah_stat_tahunan(stat_thn, current);
+    tambah_stat(stat_bln, current, 0);
+    tambah_stat(stat_thn, current, 1);
     current = current->next;
   }
 }
@@ -596,12 +561,12 @@ void sort_riwayat_tanggal(Riwayat **head)
   } while (swapped);
 }
 
-void sort_pendapatan_bln(PendapatanBulanan **head)
+void sort_pendapatan(Pendapatan **head)
 {
   int swapped;
-  PendapatanBulanan **h;
-  PendapatanBulanan *p1, *p2, *temp;
-  PendapatanBulanan *lptr = NULL;
+  Pendapatan **h;
+  Pendapatan *p1, *p2, *temp;
+  Pendapatan *lptr = NULL;
 
   if (*head == NULL)
     return;
@@ -632,48 +597,12 @@ void sort_pendapatan_bln(PendapatanBulanan **head)
   } while (swapped);
 }
 
-void sort_pendapatan_thn(PendapatanTahunan **head)
+void sort_stat(Stat **head)
 {
   int swapped;
-  PendapatanTahunan **h;
-  PendapatanTahunan *p1, *p2, *temp;
-  PendapatanTahunan *lptr = NULL;
-
-  if (*head == NULL)
-    return;
-
-  do
-  {
-    swapped = 0;
-    h = head;
-
-    while ((*h)->next != lptr)
-    {
-      p1 = *h;
-      p2 = p1->next;
-
-      if (banding_tanggal(0, 0, p1->tahun,
-                          0, 0, p2->tahun))
-      {
-        temp = p2->next;
-        p2->next = p1;
-        p1->next = temp;
-        *h = p2;
-
-        swapped = 1;
-      }
-      h = &(*h)->next;
-    }
-    lptr = *h;
-  } while (swapped);
-}
-
-void sort_stat_bln(StatBulanan **head)
-{
-  int swapped;
-  StatBulanan **h;
-  StatBulanan *p1, *p2, *temp;
-  StatBulanan *lptr = NULL;
+  Stat **h;
+  Stat *p1, *p2, *temp;
+  Stat *lptr = NULL;
 
   if (*head == NULL)
     return;
@@ -690,42 +619,6 @@ void sort_stat_bln(StatBulanan **head)
 
       if (banding_tanggal(0, p1->bulan, p1->tahun,
                           0, p2->bulan, p2->tahun))
-      {
-        temp = p2->next;
-        p2->next = p1;
-        p1->next = temp;
-        *h = p2;
-
-        swapped = 1;
-      }
-      h = &(*h)->next;
-    }
-    lptr = *h;
-  } while (swapped);
-}
-
-void sort_stat_thn(StatTahunan **head)
-{
-  int swapped;
-  StatTahunan **h;
-  StatTahunan *p1, *p2, *temp;
-  StatTahunan *lptr = NULL;
-
-  if (*head == NULL)
-    return;
-
-  do
-  {
-    swapped = 0;
-    h = head;
-
-    while ((*h)->next != lptr)
-    {
-      p1 = *h;
-      p2 = p1->next;
-
-      if (banding_tanggal(0, 0, p1->tahun,
-                          0, 0, p2->tahun))
       {
         temp = p2->next;
         p2->next = p1;

@@ -15,15 +15,15 @@ void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer u
     GtkTextBuffer *tb_pend_thn = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_pend_thn"));
     GtkWidget *label_pend_avg = g_object_get_data(G_OBJECT(nb), "label_pend_avg");
 
-    PendapatanBulanan *pend_bln = NULL;
-    PendapatanTahunan *pend_thn = NULL;
+    Pendapatan *pend_bln = NULL;
+    Pendapatan *pend_thn = NULL;
 
     generate_pendapatan(&pend_bln, &pend_thn, *riwayat_ref);
 
     char temp[STRLEN];
     snprintf(temp, sizeof(temp), "%.2f", pendapatan_rata2_thn(pend_thn));
-    print_pendapatan_bln_to_buffer(&pend_bln, tb_pend_bln);
-    print_pendapatan_thn_to_buffer(&pend_thn, tb_pend_thn);
+    print_pendapatan_to_buffer(&pend_bln, tb_pend_bln);
+    print_pendapatan_to_buffer(&pend_thn, tb_pend_thn);
     gtk_label_set_text(GTK_LABEL(label_pend_avg), temp);
   }
   else if (page_num == 3)
@@ -31,27 +31,27 @@ void on_page_change(GtkNotebook *nb, GtkWidget *page, guint page_num, gpointer u
     GtkTextBuffer *tb_stat_bln = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_stat_bln"));
     GtkTextBuffer *tb_stat_thn = GTK_TEXT_BUFFER(g_object_get_data(G_OBJECT(nb), "tb_stat_thn"));
 
-    StatBulanan *stat_bln = NULL;
-    StatTahunan *stat_thn = NULL;
+    Stat *stat_bln = NULL;
+    Stat *stat_thn = NULL;
 
     generate_stat(&stat_bln, &stat_thn, *riwayat_ref);
 
-    StatBulanan *current_bln = stat_bln;
+    Stat *current_bln = stat_bln;
     while (current_bln != NULL)
     {
       sort_stat_penyakit(&(current_bln->stat_penyakit));
       current_bln = current_bln->next;
     }
 
-    StatTahunan *current_thn = stat_thn;
+    Stat *current_thn = stat_thn;
     while (current_thn != NULL)
     {
       sort_stat_penyakit(&(current_thn->stat_penyakit));
       current_thn = current_thn->next;
     }
 
-    print_stat_bln_to_buffer(&stat_bln, tb_stat_bln);
-    print_stat_thn_to_buffer(&stat_thn, tb_stat_thn);
+    print_stat_to_buffer(&stat_bln, tb_stat_bln);
+    print_stat_to_buffer(&stat_thn, tb_stat_thn);
   }
   else if (page_num == 4)
   {
